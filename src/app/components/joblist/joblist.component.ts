@@ -1,19 +1,19 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'navbar',
+  selector: 'joblist',
   imports: [],
   template: `
     <div>
-      <h1>{{ title }}</h1>
+      joblist works!
     </div>
   `,
   styles: [`
     div {
-      color: black;
+      background-color: lightgray;
     }
     `]
 })
-export class NavbarComponent {
-  title = 'JobTrackr';
+export class JoblistComponent {
+
 }
