@@ -1,19 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Job, JobService } from '../../job.service';
 import { CommonModule } from '@angular/common';
+import { JobComponent } from '../job/job.component';
 
 @Component({
   selector: 'joblist',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, JobComponent],
   template: `
-    <div *ngFor="let job of jobs" class="job-card">
-      <img [src]="job.image" alt="Company Logo" />
-      <h3>{{ job.position }} at {{ job.company }}</h3>
-      <p>{{ job.location }}</p>
-      <p>Salary: {{ job.salary }}</p>
-      <p>Applied on: {{ job.appliedDate }}</p>
-    </div>
+    <job [jobs]="jobs"></job>
   `,
   styles: [`
     .job-card {
