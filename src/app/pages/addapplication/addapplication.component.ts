@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { JobService } from '../../job.service';
 
 @Component({
   selector: 'addapplication',
@@ -113,8 +114,27 @@ export class AddapplicationComponent {
     appliedDate: ''
   };
 
+  constructor(private jobService: JobService) {}
+
   submitForm() {
-    console.log('Job submitted:', this.job);
-    // Add Firebase logic here when you're ready
+    this.jobService.addJob(this.job)
+      .then(() => {
+        console.log('Job successfully added');
+        this.resetForm();
+      })
+      .catch((error) => {
+        console.error('Error adding job:', error);
+      });
+  }
+
+  resetForm() {
+    this.job = {
+      company: '',
+      image: '',
+      position: '',
+      salary: '',
+      location: '',
+      appliedDate: ''
+    };
   }
 }
