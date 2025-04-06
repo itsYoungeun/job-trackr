@@ -27,38 +27,87 @@ import { TogglejobsComponent } from '../togglejobs/togglejobs.component';
     </div>
   `,
   styles: [`
-    .container {
+    .navbar-container {
+      padding: 1rem;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .nav-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      color: black;
+      margin-bottom: 1rem;
     }
 
     .home-button {
       cursor: pointer;
       font-size: 1.8rem;
       font-weight: bold;
+      transition: color 0.2s ease;
     }
 
     .home-button:hover {
-      color: gray;
+      color: #3f51b5;
     }
 
     .signin-button {
       cursor: pointer;
       font-size: 1.2rem;
       font-weight: bold;
+      transition: color 0.2s ease;
     }
 
     .signin-button:hover {
-      color: gray;
+      color: #3f51b5;
     }
 
     .job-actions {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 1rem;
+      flex-wrap: nowrap;
+      width: 100%;
+    }
+
+    .left-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex: 1;
+    }
+
+    .right-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      justify-content: flex-end;
+    }
+
+    .add-button {
+      padding: 0.5rem 1rem;
+      background-color: #3f51b5;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background-color 0.2s ease;
+    }
+
+    .add-button:hover {
+      background-color: #303f9f;
+    }
+
+    @media (max-width: 768px) {
+      .job-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .left-actions, .right-actions {
+        margin-bottom: 1rem;
+      }
     }
     `]
 })

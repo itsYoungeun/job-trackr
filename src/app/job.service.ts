@@ -10,6 +10,7 @@ export interface Job {
   salary: string;
   location: string;
   appliedDate: string;
+  status: 'Applied' | 'Rejected' | 'Interview';
 }
 
 @Injectable({

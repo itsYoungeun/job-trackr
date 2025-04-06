@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { JobService } from '../../job.service';
+import { Job, JobService } from '../../job.service';
 
 @Component({
   selector: 'addapplication',
@@ -117,7 +117,12 @@ export class AddapplicationComponent {
   constructor(private jobService: JobService) {}
 
   submitForm() {
-    this.jobService.addJob(this.job)
+    const jobWithStatus: Job = {
+      ...this.job,
+      status: 'Applied'
+    };
+    
+    this.jobService.addJob(jobWithStatus)
       .then(() => {
         console.log('Job successfully added');
         this.resetForm();
