@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { collection, collectionData, Firestore } from '@angular/fire/firestore';
-import { addDoc } from 'firebase/firestore';
+import { addDoc, doc, updateDoc } from 'firebase/firestore';
 import { Observable } from 'rxjs';
 
 export interface Job {
+  id?: string;
   company: string;
   image: string;
   position: string;
@@ -27,5 +28,10 @@ export class JobService {
   getJobs(): Observable<Job[]> {
     const jobsRef = collection(this.firestore, 'jobs');
     return collectionData(jobsRef, { idField: 'id' }) as Observable<Job[]>;
+  }
+
+  updateJobStatus(jobId: string, status: 'Applied' | 'Interview' | 'Rejected') {
+    const jobRef = doc(this.firestore, 'jobs', jobId);
+    return updateDoc(jobRef, { status });
   }
 }

@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { Job } from '../../job.service';
+import { Job, JobService } from '../../job.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'job',
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   template: `
     <div class="job-grid">
       <div *ngFor="let job of jobs" class="job-card">
@@ -13,6 +14,14 @@ import { Job } from '../../job.service';
         <p>{{ job.location }}</p>
         <p>Salary: {{ job.salary }}</p>
         <p>Applied on: {{ job.appliedDate }}</p>
+        <label>
+          Status:
+          <select [(ngModel)]="job.status" (change)="handleStatusChange($event, job.id!)">
+            <option value="Applied">Applied</option>
+            <option value="Interview">Interview</option>
+            <option value="Rejected">Rejected</option>
+          </select>
+        </label>
       </div>
     </div>
   `,
@@ -41,4 +50,15 @@ import { Job } from '../../job.service';
 })
 export class JobComponent {
   @Input() jobs: Job[] = [];
+
+  constructor(private jobService: JobService) {};
+
+  handleStatusChange(event: Event, jobId: string) {
+    const newStatus = (event.target as HTMLSelectElement).value as 'Applied' | 'Interview' | 'Rejected';
+    this.updateStatus(jobId, newStatus);
+  }
+
+  updateStatus(jobId: string, newStatus: 'Applied' | 'Interview' | 'Rejected') {
+    this.jobService.updateJobStatus(jobId, newStatus);
+  };
 }
