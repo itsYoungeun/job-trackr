@@ -1,13 +1,29 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { SearchjobComponent } from "../searchjobs/searchjob.component";
+import { FilterjobsComponent } from '../filterjobs/filterjobs.component';
+import { TogglejobsComponent } from '../togglejobs/togglejobs.component';
 
 @Component({
   selector: 'navbar',
-  imports: [],
+  imports: [SearchjobComponent, FilterjobsComponent, TogglejobsComponent],
   template: `
-    <div class="container">
-      <span class="home-button" (click)="navigateToHome()">{{ title }}</span>
-      <span class="signin-button" (click)="navigateToSignin()">Sign In</span>
+    <div class="navbar-container">
+      <div class="nav-header">
+        <span class="home-button" (click)="navigateToHome()">{{ title }}</span>
+        <span class="signin-button" (click)="navigateToSignin()">Sign In</span>
+      </div>
+      
+      <div class="job-actions">
+        <div class="left-actions">
+          <searchjob></searchjob>
+          <filterjobs></filterjobs>
+        </div>
+        <div class="right-actions">
+          <togglejobs></togglejobs>
+          <button class="add-button" (click)="navigateToApplicationForm()">Add Application</button>
+        </div>
+      </div>
     </div>
   `,
   styles: [`
@@ -37,6 +53,13 @@ import { Router } from '@angular/router';
     .signin-button:hover {
       color: gray;
     }
+
+    .job-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1rem;
+    }
     `]
 })
 export class NavbarComponent {
@@ -50,5 +73,9 @@ export class NavbarComponent {
 
   navigateToSignin() {
     this.router.navigate(['/sign-in']);
+  }
+
+  navigateToApplicationForm() {
+    this.router.navigate(['/add-application']);
   }
 }

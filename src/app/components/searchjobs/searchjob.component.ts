@@ -7,9 +7,6 @@ import { Router } from '@angular/router';
   template: `
     <div>
       <input type="text" placeholder="Search job applications..." />
-      <button>Filter</button>
-      <button>Toggle</button>
-      <button (click)="navigateToApplicationForm()">Add Application</button>
     </div>
   `,
   styles: [`
@@ -17,8 +14,4 @@ import { Router } from '@angular/router';
 })
 export class SearchjobComponent {
   constructor(private router: Router) {}
-
-  navigateToApplicationForm() {
-    this.router.navigate(['/add-application']);
-  }
 }
