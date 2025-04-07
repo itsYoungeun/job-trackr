@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { Job, JobService } from '../../job.service';
+import { Job, JobService } from '../../services/job.service';
 import { FormsModule } from '@angular/forms';
 
 @Component({

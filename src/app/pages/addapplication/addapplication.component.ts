@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Job, JobService } from '../../job.service';
+import { Job, JobService } from '../../services/job.service';
 import { NavheaderComponent } from '../../components/navheader/navheader.component';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'addapplication',
@@ -108,7 +109,10 @@ import { NavheaderComponent } from '../../components/navheader/navheader.compone
   
 })
 export class AddapplicationComponent {
-  constructor(private jobService: JobService) {}
+  constructor(
+    private jobService: JobService, 
+    private authService: AuthService
+  ) {}
 
   job = {
     company: '',
