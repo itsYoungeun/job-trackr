@@ -10,10 +10,11 @@ import { IconModule } from '../../shared/icon.module';
   template: `
     <div [ngClass]="layout === 'grid' ? 'job-grid' : 'job-list'">
       <div *ngFor="let job of jobs" class="job-card">
+
         <div class="job-header">
           <div class="job-header-content">
             <img [src]="job.image" alt="Company Logo" class="job-logo" />
-            <div>
+            <div class="job-info-block">
               <h3 class="job-title">{{ job.position }}</h3>
               <div class="job-company">
                 <lucide-icon name="building2" class="my-icon"></lucide-icon>
@@ -24,14 +25,15 @@ import { IconModule } from '../../shared/icon.module';
         </div>
 
         <div class="job-details">
-          <span class="status-badge" [ngClass]="getStatusClass(job.status)">
-            {{ job.status }}
-          </span>
+          <div class="job-location">
+            <lucide-icon name="map-pin" class="my-icon"></lucide-icon>
+            <span>{{ job.location }}</span>
+          </div>
 
           <div class="job-meta">
             <div class="job-meta-item">
-            <lucide-icon name="calendar" class="my-icon"></lucide-icon>
-            <span>{{ job.appliedDate }}</span>
+              <lucide-icon name="calendar" class="my-icon"></lucide-icon>
+              <span>{{ job.appliedDate }}</span>
             </div>
             <div class="job-meta-item">
               <lucide-icon name="hand-coins" class="my-icon"></lucide-icon>
@@ -39,38 +41,46 @@ import { IconModule } from '../../shared/icon.module';
             </div>
           </div>
 
-          <div class="job-status-select">
-            <label class="job-status-label">Status:</label>
-            <select 
-              [(ngModel)]="job.status" 
-              (change)="handleStatusChange($event, job.id!)"
-              class="job-select"
-            >
-              <option value="Applied">Applied</option>
-              <option value="Interview">Interview</option>
-              <option value="Rejected">Rejected</option>
-            </select>
-          </div>
+          <span 
+            class="status-badge" 
+            [ngClass]="getStatusClass(job.status)"
+            (click)="handleStatusClick(job)"
+            style="cursor: pointer;"
+            title="Click to cycle status"
+          >
+            {{ job.status }}
+          </span>
         </div>
       </div>
     </div>
   `,
   styles: [`
+    .job-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      padding: 2rem;
+      margin: 1rem auto;
+    }
+
+    .job-list .job-card {
+      display: flex;
+      flex-direction: row;
+    }
+
+    .job-list .job-details {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin-left: 1.5rem;
+    }
+
     .job-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 2rem;
       padding: 2rem;
       max-width: 1400px;
-      margin: 1rem auto;
-    }
-
-    .job-list {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-      padding: 2rem;
-      max-width: 800px;
       margin: 1rem auto;
     }
 
@@ -126,11 +136,33 @@ import { IconModule } from '../../shared/icon.module';
       gap: 1rem;
     }
 
+    .job-location {
+      display: flex;
+      align-items: center;
+      font-size: 0.875rem;
+      color: #6b7280;
+      gap: 0.5rem;
+    }
+
+    .job-meta {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
+
+    .job-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
     .status-badge {
       display: inline-block;
       padding: 0.25rem 0.75rem;
       border-radius: 9999px;
-      font-size: 0.75rem;
+      font-size: 1rem;
       font-weight: 500;
       width: fit-content;
     }
@@ -149,52 +181,13 @@ import { IconModule } from '../../shared/icon.module';
       background-color: #fee2e2;
       color: #b91c1c;
     }
-
-    .job-meta {
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-      font-size: 0.875rem;
-      color: #6b7280;
-    }
-
-    .job-meta-item {
-      display: flex;
-      align-items: center;
-      gap: 0.25rem;
-    }
-
-    .job-status-select {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .job-status-label {
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: #374151;
-    }
-
-    .job-select {
-      padding: 0.25rem 0.5rem;
-      font-size: 0.875rem;
-      border: 1px solid #d1d5db;
-      border-radius: 0.375rem;
-      outline: none;
-      transition: box-shadow 0.2s ease-in-out;
-    }
-
-    .job-select:focus {
-      box-shadow: 0 0 0 1px #6366f1;
-    }
   `]
 })
 export class JobComponent {
   @Input() jobs: Job[] = [];
-  @Input() layout: 'grid' | 'list' = 'grid'
+  @Input() layout: 'grid' | 'list' = 'grid';
 
-  constructor(private jobService: JobService) {};
+  constructor(private jobService: JobService) {}
 
   getStatusClass(status: 'Applied' | 'Interview' | 'Rejected'): string {
     switch (status) {
@@ -205,12 +198,19 @@ export class JobComponent {
     }
   }
 
-  handleStatusChange(event: Event, jobId: string) {
-    const newStatus = (event.target as HTMLSelectElement).value as 'Applied' | 'Interview' | 'Rejected';
-    this.updateStatus(jobId, newStatus);
+  cycleStatus(currentStatus: 'Applied' | 'Interview' | 'Rejected'): 'Applied' | 'Interview' | 'Rejected' {
+    const order: ('Applied' | 'Interview' | 'Rejected')[] = ['Applied', 'Interview', 'Rejected'];
+    const index = order.indexOf(currentStatus);
+    return order[(index + 1) % order.length];
+  }
+
+  handleStatusClick(job: Job) {
+    const newStatus = this.cycleStatus(job.status);
+    this.updateStatus(job.id!, newStatus);
+    job.status = newStatus;
   }
 
   updateStatus(jobId: string, newStatus: 'Applied' | 'Interview' | 'Rejected') {
     this.jobService.updateJobStatus(jobId, newStatus);
-  };
+  }
 }
