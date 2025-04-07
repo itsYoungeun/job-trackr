@@ -2,12 +2,15 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Job, JobService } from '../../job.service';
+import { NavheaderComponent } from '../../components/navheader/navheader.component';
 
 @Component({
   selector: 'addapplication',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, NavheaderComponent],
   template: `
+    <navheader></navheader>
+
     <div class="form-wrapper">
       <h2>Add Job Application</h2>
 
@@ -105,6 +108,8 @@ import { Job, JobService } from '../../job.service';
   
 })
 export class AddapplicationComponent {
+  constructor(private jobService: JobService) {}
+
   job = {
     company: '',
     image: '',
@@ -113,8 +118,6 @@ export class AddapplicationComponent {
     location: '',
     appliedDate: ''
   };
-
-  constructor(private jobService: JobService) {}
 
   submitForm() {
     const jobWithStatus: Job = {

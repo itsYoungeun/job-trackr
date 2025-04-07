@@ -32,15 +32,17 @@ import { FormsModule } from '@angular/forms';
       gap: 2rem;
       padding: 2rem;
       width: 100%;
-      max-width: 1450px;
+      max-width: 1400px;
       margin: 1rem auto;
     }
+
     .job-card {
       padding: 1rem;
       background-color: #fff;
       border-radius: 10px;
       box-shadow: 0 0 8px rgba(0,0,0,0.1);
     }
+
     img {
       max-width: 100px;
       border-radius: 8px;
