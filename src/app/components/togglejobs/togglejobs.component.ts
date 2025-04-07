@@ -1,36 +1,83 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { IconModule } from '../../shared/icon.module';
 
 @Component({
   selector: 'togglejobs',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, IconModule],
   template: `
-    <div class="toggle-container">
-      <button [class.active]="layout === 'grid'" (click)="changeLayout('grid')">Grid View</button>
-      <button [class.active]="layout === 'list'" (click)="changeLayout('list')">List View</button>
+    <div class="slider-toggle">
+      <div class="slider-background">
+        <div 
+          class="slider-indicator" 
+          [ngClass]="{ 'left': layout === 'grid', 'right': layout === 'list' }"
+        ></div>
+        <button 
+          class="toggle-button"  
+          (click)="changeLayout('grid')"
+          title="Grid View"
+        >
+          <lucide-icon name="layout-grid" size="20"></lucide-icon>
+        </button>
+        <button 
+          class="toggle-button" 
+          (click)="changeLayout('list')"
+          title="List View"
+        >
+          <lucide-icon name="list" size="20"></lucide-icon>
+        </button>
+      </div>
     </div>
   `,
   styles: [`
-    .toggle-container {
+    .slider-toggle {
       display: flex;
-      gap: 0.5rem;
-      margin: 1rem auto;
       justify-content: center;
     }
 
-    button {
-      padding: 0.5rem 1rem;
-      border-radius: 0.5rem;
-      border: 1px solid #d1d5db;
-      background-color: #f3f4f6;
-      cursor: pointer;
+    .slider-background {
+      position: relative;
+      display: flex;
+      width: 82px;
+      height: 40px;
+      background-color: #e5e7eb;
+      border-radius: 5px;
+      padding: 4px;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
     }
 
-    .active {
-      background-color: #6366f1;
-      color: white;
-      border-color: #6366f1;
+    .toggle-button {
+      flex: 1;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 9999px;
+      transition: background-color 0.3s;
+    }
+
+    .slider-indicator {
+      position: absolute;
+      top: 4px;
+      bottom: 4px;
+      width: 41px;
+      background-color: white;
+      border-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+      z-index: 1;
+    }
+
+    .slider-indicator.left {
+      transform: translateX(0%);
+    }
+
+    .slider-indicator.right {
+      transform: translateX(100%);
     }
   `]
 })

@@ -167,6 +167,11 @@ import { IconModule } from '../../shared/icon.module';
       width: fit-content;
     }
 
+    .status-badge:hover {
+      cursor: pointer;
+      opacity: 0.8;
+    }
+
     .status-applied {
       background-color: #dbeafe;
       color: #1d4ed8;
