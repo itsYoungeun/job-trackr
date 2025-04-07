@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, NavigationEnd } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { filter } from 'rxjs/operators';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'navheader',
@@ -10,13 +12,23 @@ import { CommonModule } from '@angular/common';
     <div class="navbar-container">
       <div class="nav-header">
         <span class="home-button" (click)="navigateToHome()">Job Trackr</span>
-        <span 
-          class="signin-button" 
-          (click)="navigateToSignin()"
-          *ngIf="!isOnSignInPage"
-        >
-          Sign In
-        </span>
+
+        <ng-container *ngIf="isHomePage">
+          <span
+            class="signin-button"
+            *ngIf="!isLoggedIn"
+            (click)="navigateToSignin()"
+          >
+            Sign In
+          </span>
+          <span
+            class="signin-button"
+            *ngIf="isLoggedIn"
+            (click)="logout()"
+          >
+            Sign Out
+          </span>
+        </ng-container>
       </div>
     </div>
   `,
@@ -59,11 +71,23 @@ import { CommonModule } from '@angular/common';
 })
 export class NavheaderComponent {
   isOnSignInPage = false;
+  isOnSignUpPage = false;
+  isHomePage = false;
+  isLoggedIn = false;
 
-  constructor(private router: Router) {
-    this.router.events.subscribe(() => {
-      this.isOnSignInPage = this.router.url === '/sign-in';
-    });
+  constructor(private router: Router, private authService: AuthService) {
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe(() => {
+        const currentUrl = this.router.url;
+        this.isOnSignInPage = currentUrl === '/sign-in';
+        this.isOnSignUpPage = currentUrl === '/sign-up';
+        this.isHomePage = currentUrl === '/';
+      });
+
+    this.authService.currentUser$.subscribe(user => {
+      this.isLoggedIn = !!user;
+    })
   }
 
   navigateToHome() {
@@ -72,5 +96,9 @@ export class NavheaderComponent {
 
   navigateToSignin() {
     this.router.navigate(['/sign-in']);
+  }
+
+  logout() {
+    this.authService.logout().then(() => this.router.navigate(['']));
   }
 }

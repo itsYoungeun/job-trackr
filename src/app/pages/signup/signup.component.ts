@@ -1,43 +1,36 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { NavheaderComponent } from "../../components/navheader/navheader.component";
+import { Router } from '@angular/router';
+import { NavheaderComponent } from '../../components/navheader/navheader.component';
 
 @Component({
-  selector: 'signin',
+  selector: 'signup',
   imports: [CommonModule, FormsModule, NavheaderComponent],
   template: `
     <navheader></navheader>
 
     <div class="form-wrapper">
-      <h2>Sign In</h2>
+      <h2>Sign Up</h2>
 
-      <form #signInForm="ngForm" (ngSubmit)="signIn()">
+      <form #signUpForm="ngForm" (ngSubmit)="signUp()">
         <label>
-          Enter your email:
-          <input type="text" name="email" [(ngModel)]="email" required />
+          Email:
+          <input type="email" name="email" [(ngModel)]="email" required />
         </label>
 
         <label>
           Password:
-          <input type="password" name="password" [(ngModel)]="password" required />
+          <input type="password" name="password" [(ngModel)]="password" required minlength="6" />
         </label>
 
-        <button type="submit" [disabled]="signInForm.invalid">Sign In</button>
-
-        <span 
-          (click)="navigateToSignupForm()" 
-          class="signup-link"
-        >
-          Haven't signed up? Sign up here
-        </span>
+        <button type="submit" [disabled]="signUpForm.invalid">Create Account</button>
       </form>
     </div>
   `,
   styles: [`
-    .form-wrapper {
+  .form-wrapper {
       max-width: 500px;
       margin: 2rem auto;
       padding: 2rem;
@@ -72,7 +65,7 @@ import { NavheaderComponent } from "../../components/navheader/navheader.compone
     }
   
     button {
-      margin: 1rem 0;
+      margin-top: 1rem;
       padding: 0.75rem;
       background-color: #3f51b5;
       color: white;
@@ -91,34 +84,22 @@ import { NavheaderComponent } from "../../components/navheader/navheader.compone
       background-color: #ccc;
       cursor: not-allowed;
     }
-
-    .signup-link {
-      color: #3f51b5;
-      text-align: center;
-      cursor: pointer;
-      text-decoration: underline;
-      font-weight: 500;
-    }
   `]
 })
-export class SigninComponent {
+export class SignupComponent {
   email = '';
   password = '';
 
   constructor(private authService: AuthService, private router: Router) {}
 
-  signIn() {
-    this.authService.signIn(this.email, this.password)
+  signUp() {
+    this.authService.signUp(this.email, this.password)
       .then(() => {
-        console.log('Signed in successfully');
-        this.router.navigate(['/']); // or route to jobs list
+        console.log('User registered successfully');
+        this.router.navigate(['/']);
       })
       .catch(error => {
-        console.error('Sign-in failed:', error.message);
+        console.error('Error during sign-up:', error.message);
       });
-  }
-
-  navigateToSignupForm() {
-    this.router.navigate(['/sign-up']);
   }
 }

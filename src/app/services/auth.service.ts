@@ -1,5 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Auth, onAuthStateChanged, User, signInWithEmailAndPassword, signOut } from '@angular/fire/auth';
+import {
+  Auth,
+  onAuthStateChanged,
+  User,
+  signInWithEmailAndPassword,
+  signOut,
+  createUserWithEmailAndPassword
+} from '@angular/fire/auth';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
@@ -21,6 +28,10 @@ export class AuthService {
 
   signIn(email: string, password: string) {
     return signInWithEmailAndPassword(this.auth, email, password);
+  }
+
+  signUp(email: string, password: string) {
+    return createUserWithEmailAndPassword(this.auth, email, password);
   }
 
   logout() {

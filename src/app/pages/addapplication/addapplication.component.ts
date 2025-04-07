@@ -109,10 +109,7 @@ import { AuthService } from '../../services/auth.service';
   
 })
 export class AddapplicationComponent {
-  constructor(
-    private jobService: JobService, 
-    private authService: AuthService
-  ) {}
+  constructor(private jobService: JobService, private authService: AuthService) {}
 
   job = {
     company: '',
