@@ -99,6 +99,10 @@ export class NavheaderComponent {
   }
 
   logout() {
-    this.authService.logout().then(() => this.router.navigate(['']));
+    this.authService.logout().then(() => {
+      this.router.navigate(['']).then(() => {
+        location.reload();
+      });
+    });
   }
 }
