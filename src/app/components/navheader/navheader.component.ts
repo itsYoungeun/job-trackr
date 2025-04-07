@@ -1,15 +1,22 @@
 import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'navheader',
   standalone: true,
-  imports: [RouterModule],
+  imports: [RouterModule, CommonModule],
   template: `
     <div class="navbar-container">
       <div class="nav-header">
         <span class="home-button" (click)="navigateToHome()">Job Trackr</span>
-        <span class="signin-button" (click)="navigateToSignin()">Sign In</span>
+        <span 
+          class="signin-button" 
+          (click)="navigateToSignin()"
+          *ngIf="!isOnSignInPage"
+        >
+          Sign In
+        </span>
       </div>
     </div>
   `,
@@ -51,7 +58,13 @@ import { Router, RouterModule } from '@angular/router';
   `]
 })
 export class NavheaderComponent {
-  constructor(private router: Router) {}
+  isOnSignInPage = false;
+
+  constructor(private router: Router) {
+    this.router.events.subscribe(() => {
+      this.isOnSignInPage = this.router.url === '/sign-in';
+    });
+  }
 
   navigateToHome() {
     this.router.navigate(['']);
