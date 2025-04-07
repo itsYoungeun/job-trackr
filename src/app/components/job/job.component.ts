@@ -8,7 +8,7 @@ import { IconModule } from '../../shared/icon.module';
   selector: 'job',
   imports: [CommonModule, FormsModule, IconModule],
   template: `
-    <div class="job-grid">
+    <div [ngClass]="layout === 'grid' ? 'job-grid' : 'job-list'">
       <div *ngFor="let job of jobs" class="job-card">
         <div class="job-header">
           <div class="job-header-content">
@@ -62,6 +62,15 @@ import { IconModule } from '../../shared/icon.module';
       gap: 2rem;
       padding: 2rem;
       max-width: 1400px;
+      margin: 1rem auto;
+    }
+
+    .job-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      padding: 2rem;
+      max-width: 800px;
       margin: 1rem auto;
     }
 
@@ -183,6 +192,7 @@ import { IconModule } from '../../shared/icon.module';
 })
 export class JobComponent {
   @Input() jobs: Job[] = [];
+  @Input() layout: 'grid' | 'list' = 'grid'
 
   constructor(private jobService: JobService) {};
 

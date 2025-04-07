@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { NavheaderComponent } from './../navheader/navheader.component';
 import { SearchjobComponent } from "../searchjobs/searchjob.component";
@@ -10,14 +10,15 @@ import { TogglejobsComponent } from '../togglejobs/togglejobs.component';
   imports: [NavheaderComponent, SearchjobComponent, FilterjobsComponent, TogglejobsComponent],
   template: `
     <navheader></navheader>
-    
+
     <div class="job-actions">
       <div class="left-actions">
         <searchjob></searchjob>
         <filterjobs></filterjobs>
       </div>
+      
       <div class="right-actions">
-        <togglejobs></togglejobs>
+        <togglejobs [layout]="layout" (layoutChange)="layoutChange.emit($event)"></togglejobs>
         <button class="add-button" (click)="navigateToApplicationForm()">Add Application</button>
       </div>
     </div>
@@ -73,6 +74,9 @@ import { TogglejobsComponent } from '../togglejobs/togglejobs.component';
     `]
 })
 export class NavbarComponent {
+  @Input() layout: 'grid' | 'list' = 'grid';
+  @Output() layoutChange = new EventEmitter<'grid' | 'list'>();
+
   constructor(private router: Router) {};
 
   navigateToApplicationForm() {
