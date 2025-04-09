@@ -13,6 +13,7 @@ export interface Job {
   appliedDate: string;
   status: 'Applied' | 'Rejected' | 'Interview';
   uid?: string;
+  description?: string;
 }
 
 @Injectable({
@@ -54,4 +55,9 @@ export class JobService {
     const jobRef = doc(this.firestore, 'jobs', jobId);
     return updateDoc(jobRef, { status });
   }
+
+  updateJobDescription(jobId: string, description: string) {
+    const jobRef = doc(this.firestore, `jobs/${jobId}`);
+    return updateDoc(jobRef, { description });
+  }  
 }

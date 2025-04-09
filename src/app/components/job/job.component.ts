@@ -3,13 +3,21 @@ import { Component, Input } from '@angular/core';
 import { Job, JobService } from '../../services/job.service';
 import { FormsModule } from '@angular/forms';
 import { IconModule } from '../../shared/icon.module';
+import { JobdescriptionComponent } from '../jobdescription/jobdescription.component';
 
 @Component({
   selector: 'job',
-  imports: [CommonModule, FormsModule, IconModule],
+  imports: [CommonModule, FormsModule, IconModule, JobdescriptionComponent],
   template: `
+    <jobdescription
+      *ngIf="isModalOpen"
+      [job]="selectedJob!"
+      (close)="closeModal()"
+      (save)="saveDescription($event)"
+    ></jobdescription>
+
     <div [ngClass]="layout === 'grid' ? 'job-grid' : 'job-list'">
-      <div *ngFor="let job of jobs" class="job-card">
+      <div *ngFor="let job of jobs" class="job-card" (click)="openModal(job)">
 
         <div class="job-header">
           <div class="job-header-content">
@@ -44,8 +52,7 @@ import { IconModule } from '../../shared/icon.module';
           <span 
             class="status-badge" 
             [ngClass]="getStatusClass(job.status)"
-            (click)="handleStatusClick(job)"
-            style="cursor: pointer;"
+            (click)="handleStatusClick(job); $event.stopPropagation()"
             title="Click to cycle status"
           >
             {{ job.status }}
@@ -191,6 +198,8 @@ import { IconModule } from '../../shared/icon.module';
 export class JobComponent {
   @Input() jobs: Job[] = [];
   @Input() layout: 'grid' | 'list' = 'grid';
+  isModalOpen = false;
+  selectedJob: Job | null = null;
 
   constructor(private jobService: JobService) {}
 
@@ -218,4 +227,22 @@ export class JobComponent {
   updateStatus(jobId: string, newStatus: 'Applied' | 'Interview' | 'Rejected') {
     this.jobService.updateJobStatus(jobId, newStatus);
   }
+
+  saveDescription(newDescription: string) {
+    if (this.selectedJob) {
+      this.selectedJob.description = newDescription;
+      this.jobService.updateJobDescription(this.selectedJob.id!, newDescription);
+      this.closeModal();
+    }
+  }
+
+  openModal(job: Job) {
+    this.selectedJob = job;
+    this.isModalOpen = true;
+  }
+  
+  closeModal() {
+    this.isModalOpen = false;
+    this.selectedJob = null;
+  }  
 }
