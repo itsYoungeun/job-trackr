@@ -23,7 +23,9 @@ import { JobdescriptionComponent } from '../jobdescription/jobdescription.compon
           <div class="job-header-content">
             <img [src]="job.image" alt="Company Logo" class="job-logo" />
             <div class="job-info-block">
-              <h3 class="job-title">{{ job.position }}</h3>
+              <h3 class="job-title" [ngClass]="{ 'clamp-1': layout === 'grid' }">
+                {{ job.position }}
+              </h3>
               <div class="job-company">
                 <lucide-icon name="building2" class="my-icon"></lucide-icon>
                 <span>{{ job.company }}</span>
@@ -35,7 +37,9 @@ import { JobdescriptionComponent } from '../jobdescription/jobdescription.compon
         <div class="job-details">
           <div class="job-location">
             <lucide-icon name="map-pin" class="my-icon"></lucide-icon>
-            <span>{{ job.location }}</span>
+            <span [ngClass]="{ 'clamp-2': layout === 'grid' }">
+              {{ job.location }}
+            </span>
           </div>
 
           <div class="job-meta">
@@ -129,6 +133,13 @@ import { JobdescriptionComponent } from '../jobdescription/jobdescription.compon
       color: #111827;
     }
 
+    .clamp-1 {
+      width: 12rem;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
     .job-company {
       display: flex;
       align-items: center;
@@ -149,6 +160,15 @@ import { JobdescriptionComponent } from '../jobdescription/jobdescription.compon
       font-size: 0.875rem;
       color: #6b7280;
       gap: 0.5rem;
+      max-width: 500px;
+    }
+
+    .clamp-2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .job-meta {

@@ -42,11 +42,12 @@ import { Job } from '../../services/job.service';
       padding: 2rem;
       border-radius: 1rem;
       width: 90%;
-      max-width: 600px;
+      max-width: 900px;
     }
 
     .modal-textarea {
       width: 100%;
+      height: 400px;
       border: 1px solid #ddd;
       border-radius: 0.5rem;
       font-size: 1rem;
