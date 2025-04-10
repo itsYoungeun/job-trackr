@@ -1,11 +1,11 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import {
   Auth,
   onAuthStateChanged,
   User,
   signInWithEmailAndPassword,
   signOut,
-  createUserWithEmailAndPassword
+  createUserWithEmailAndPassword,
 } from '@angular/fire/auth';
 import { BehaviorSubject } from 'rxjs';
 
@@ -16,9 +16,10 @@ export class AuthService {
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor(private auth: Auth) {
-    onAuthStateChanged(this.auth, (user) => {
-      this.currentUserSubject.next(user);
+  constructor(private auth: Auth, private zone: NgZone) {    onAuthStateChanged(this.auth, (user) => {
+      this.zone.run(() => {
+        this.currentUserSubject.next(user);
+      });
     });
   }
 
