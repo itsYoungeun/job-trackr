@@ -1,18 +1,19 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, collectionData, query, where, addDoc, doc, updateDoc } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, query, where, addDoc, doc, updateDoc, getDocs } from '@angular/fire/firestore';
 import { Observable, of, BehaviorSubject } from 'rxjs';
 import { AuthService } from './auth.service';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 export interface Job {
   id?: string;
+  uid?: string;
   company: string;
   image: string;
   position: string;
   salary: string;
   location: string;
   appliedDate: string;
-  status: 'Applied' | 'Rejected' | 'Interview';
-  uid?: string;
+  status: 'Pending' | 'Interview' | 'Rejected';
   description?: string;
 }
 
@@ -40,18 +41,23 @@ export class JobService {
   }
 
   getJobs(): Observable<Job[]> {
-    const uid = this.authService.getUserId();
-
-    if (uid) {
-      const jobsRef = collection(this.firestore, 'jobs');
-      const userJobsQuery = query(jobsRef, where('uid', '==', uid));
-      return collectionData(userJobsQuery, { idField: 'id' }) as Observable<Job[]>;
-    } else {
-      return this.tempJobsSubject.asObservable();
-    }
+    return new Observable((observer) => {
+      const auth = getAuth();
+      onAuthStateChanged(auth, async (user) => {
+        if (user) {
+          const jobsRef = collection(this.firestore, 'jobs');
+          const q = query(jobsRef, where('uid', '==', user.uid));
+          const snapshot = await getDocs(q);
+          const jobs = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as Job));
+          observer.next(jobs);
+        } else {
+          observer.next([]);
+        }
+      });
+    });
   }
 
-  updateJobStatus(jobId: string, status: 'Applied' | 'Interview' | 'Rejected') {
+  updateJobStatus(jobId: string, status: 'Pending' | 'Interview' | 'Rejected') {
     const jobRef = doc(this.firestore, 'jobs', jobId);
     return updateDoc(jobRef, { status });
   }

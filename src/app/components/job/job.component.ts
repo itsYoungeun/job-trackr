@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Job, JobService } from '../../services/job.service';
 import { FormsModule } from '@angular/forms';
 import { IconModule } from '../../shared/icon.module';
@@ -190,14 +190,14 @@ import { JobdescriptionComponent } from '../jobdescription/jobdescription.compon
       opacity: 0.8;
     }
 
-    .status-applied {
-      background-color: #dbeafe;
-      color: #1d4ed8;
+    .status-pending {
+      background-color: #fef9c3;
+      color: #a16207;
     }
 
     .status-interview {
-      background-color: #fef9c3;
-      color: #a16207;
+      background-color: #dbeafe;
+      color: #1d4ed8;
     }
 
     .status-rejected {
@@ -249,7 +249,7 @@ import { JobdescriptionComponent } from '../jobdescription/jobdescription.compon
     }
   `]
 })
-export class JobComponent {
+export class JobComponent implements OnInit{
   @Input() jobs: Job[] = [];
   @Input() layout: 'grid' | 'list' = 'grid';
   isModalOpen = false;
@@ -257,17 +257,23 @@ export class JobComponent {
 
   constructor(private jobService: JobService) {}
 
-  getStatusClass(status: 'Applied' | 'Interview' | 'Rejected'): string {
+  ngOnInit(): void {
+    this.jobService.getJobs().subscribe((jobs) => {
+      this.jobs = jobs;
+    });
+  }
+
+  getStatusClass(status: 'Pending' | 'Interview' | 'Rejected'): string {
     switch (status) {
-      case 'Applied': return 'status-applied';
+      case 'Pending': return 'status-pending';
       case 'Interview': return 'status-interview';
       case 'Rejected': return 'status-rejected';
       default: return '';
     }
   }
 
-  cycleStatus(currentStatus: 'Applied' | 'Interview' | 'Rejected'): 'Applied' | 'Interview' | 'Rejected' {
-    const order: ('Applied' | 'Interview' | 'Rejected')[] = ['Applied', 'Interview', 'Rejected'];
+  cycleStatus(currentStatus: 'Pending' | 'Interview' | 'Rejected'): 'Pending' | 'Interview' | 'Rejected' {
+    const order: ('Pending' | 'Interview' | 'Rejected')[] = ['Pending', 'Interview', 'Rejected'];
     const index = order.indexOf(currentStatus);
     return order[(index + 1) % order.length];
   }
@@ -278,7 +284,7 @@ export class JobComponent {
     job.status = newStatus;
   }
 
-  updateStatus(jobId: string, newStatus: 'Applied' | 'Interview' | 'Rejected') {
+  updateStatus(jobId: string, newStatus: 'Pending' | 'Interview' | 'Rejected') {
     this.jobService.updateJobStatus(jobId, newStatus);
   }
 

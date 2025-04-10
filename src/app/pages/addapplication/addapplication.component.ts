@@ -123,7 +123,7 @@ export class AddapplicationComponent {
   submitForm() {
     const jobWithStatus: Job = {
       ...this.job,
-      status: 'Applied'
+      status: 'Pending'
     };
     
     this.jobService.addJob(jobWithStatus)
