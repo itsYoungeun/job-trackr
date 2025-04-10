@@ -204,6 +204,49 @@ import { JobdescriptionComponent } from '../jobdescription/jobdescription.compon
       background-color: #fee2e2;
       color: #b91c1c;
     }
+
+    @media (max-width: 768px) {
+      .job-list, .job-grid {
+        padding: 2rem;
+        gap: 1rem;
+      }
+
+      .job-card {
+        padding: 2rem;
+      }
+
+      .job-list .job-card {
+        flex-direction: column;
+      }
+
+      .job-list .job-details {
+        flex-direction: column;
+        align-items: flex-start;
+        margin-left: 0;
+      }
+
+      .job-header-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+      }
+
+      .job-logo {
+        width: 60px;
+        height: 60px;
+      }
+
+      .job-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+
+      .status-badge {
+        font-size: 0.875rem;
+        padding: 0.25rem 0.5rem;
+      }
+    }
   `]
 })
 export class JobComponent {
