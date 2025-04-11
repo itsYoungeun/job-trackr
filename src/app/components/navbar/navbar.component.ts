@@ -14,7 +14,7 @@ import { JoblistComponent } from '../joblist/joblist.component';
 
     <div class="job-actions">
       <div class="left-actions">
-        <searchjob></searchjob>
+        <searchjob (search)="onSearchChange($event)"></searchjob>
         <filterjobs (filterChange)="onFilterChange($event)"></filterjobs>
       </div>
       
@@ -79,6 +79,7 @@ export class NavbarComponent {
   @Input() filter: string = '';
   @Output() layoutChange = new EventEmitter<'grid' | 'list'>();
   @Output() filterChange = new EventEmitter<string>();
+  @Output() searchChange = new EventEmitter<string>();
 
   constructor(private router: Router) {};
 
@@ -93,5 +94,9 @@ export class NavbarComponent {
   onFilterChange(filter: string) {
     this.filter = filter;
     this.filterChange.emit(filter);
+  }
+
+  onSearchChange(term: string) {
+    this.searchChange.emit(term);
   }
 }

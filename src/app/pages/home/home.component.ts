@@ -8,22 +8,30 @@ import { JoblistComponent } from "../../components/joblist/joblist.component";
   imports: [CommonModule, NavbarComponent, JoblistComponent],
   template: `
     <navbar 
-      [layout]="layout" 
+      [layout]="layout"
       (layoutChange)="layout = $event"
-      (filterChange)="onFilterChange($event)">
-    ></navbar>
+      (filterChange)="onFilterChange($event)"
+      (searchChange)="onSearchChange($event)">
+    </navbar>
+
     <joblist 
       [layout]="layout"
-      [filter]="filter">
-    ></joblist>
+      [filter]="filter"
+      [searchTerm]="searchTerm">
+    </joblist>
   `,
   styles: ``
 })
 export class HomeComponent {
   layout: 'grid' | 'list' = 'grid';
   filter: string = '';
+  searchTerm: string = '';
 
   onFilterChange(filter: string) {
     this.filter = filter;
+  }
+
+  onSearchChange(term: string) {
+    this.searchTerm = term;
   }
 }

@@ -1,17 +1,21 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'searchjob',
-  imports: [],
+  standalone: true,
   template: `
-    <div>
-      <input type="text" placeholder="Search job applications..." />
-    </div>
+    <input 
+      type="text" 
+      placeholder="Search job applications..." 
+      (input)="onSearch($event)" />
   `,
-  styles: [`
-    `]
+  styles: [``]
 })
 export class SearchjobComponent {
-  constructor(private router: Router) {}
+  @Output() search = new EventEmitter<string>();
+
+  onSearch(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.search.emit(input.value.toLowerCase());
+  }
 }

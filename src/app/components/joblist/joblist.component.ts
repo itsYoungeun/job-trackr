@@ -15,6 +15,7 @@ import { JobComponent } from '../job/job.component';
 export class JoblistComponent implements OnInit {
   @Input() layout: 'grid' | 'list' = 'grid';
   @Input() filter: string = 'recent';
+  @Input() searchTerm: string = '';
 
   jobs: Job[] = [];
   allJobs: Job[] = [];
@@ -29,7 +30,7 @@ export class JoblistComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['filter']) {
+    if (changes['filter'] || changes['searchTerm']) {
       this.applyFilter();
     }
   }
@@ -41,23 +42,28 @@ export class JoblistComponent implements OnInit {
   applyFilter(filterOverride?: string) {
     const filter = filterOverride ?? this.filter;
   
+    let filtered = [...this.allJobs];
     switch (filter) {
       case 'pay':
-        this.jobs = [...this.allJobs].sort((a, b) => 
-          this.parseSalary(b.salary) - this.parseSalary(a.salary)
-        );
+        filtered.sort((a, b) => this.parseSalary(b.salary) - this.parseSalary(a.salary));
         break;
       case 'status':
-        this.jobs = [...this.allJobs].sort((a, b) => 
-          a.status.localeCompare(b.status)
-        );
+        filtered.sort((a, b) => a.status.localeCompare(b.status));
         break;
       case 'recent':
       default:
-        this.jobs = [...this.allJobs].sort((a, b) => 
+        filtered.sort((a, b) => 
           new Date(b.appliedDate || '').getTime() - new Date(a.appliedDate || '').getTime()
         );
-        break;
     }
-  }  
+  
+    if (this.searchTerm.trim()) {
+      filtered = filtered.filter(job =>
+        job.position.toLowerCase().includes(this.searchTerm) ||
+        job.company.toLowerCase().includes(this.searchTerm)
+      );
+    }
+  
+    this.jobs = filtered;
+  }
 }
