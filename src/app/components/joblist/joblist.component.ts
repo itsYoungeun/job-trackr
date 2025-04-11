@@ -34,13 +34,17 @@ export class JoblistComponent implements OnInit {
     }
   }
 
+  parseSalary(salary: string): number {
+    return parseInt(salary.replace(/[^0-9]/g, ''), 10) || 0;
+  }
+
   applyFilter(filterOverride?: string) {
     const filter = filterOverride ?? this.filter;
   
     switch (filter) {
       case 'pay':
         this.jobs = [...this.allJobs].sort((a, b) => 
-          Number(b.salary || 0) - Number(a.salary || 0)
+          this.parseSalary(b.salary) - this.parseSalary(a.salary)
         );
         break;
       case 'status':
