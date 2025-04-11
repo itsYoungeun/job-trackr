@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, ElementRef, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IconModule } from '../../shared/icon.module';
 
@@ -28,7 +28,7 @@ import { IconModule } from '../../shared/icon.module';
     }
 
     .dropdown-btn {
-      width: 100%;
+      width: 8rem;
       display: flex;
       align-items: center;
       padding: 0.5rem 1rem;
@@ -51,7 +51,7 @@ import { IconModule } from '../../shared/icon.module';
       position: absolute;
       top: 100%;
       left: 0;
-      width: 100%;
+      width: 8rem;
       margin-top: 0.25rem;
       background-color: #fff;
       border: 1px solid #e5e7eb;
@@ -79,6 +79,8 @@ export class FilterjobsComponent {
   @Output() filterChange = new EventEmitter<string>();
   open = false;
 
+  constructor(private eRef: ElementRef) {}
+
   toggleDropdown() {
     this.open = !this.open;
   }
@@ -86,5 +88,12 @@ export class FilterjobsComponent {
   select(value: string) {
     this.filterChange.emit(value);
     this.open = false;
+  }
+
+  @HostListener('document:click', ['$event'])
+  handleClickOutside(event: Event) {
+    if (!this.eRef.nativeElement.contains(event.target)) {
+      this.open = false;
+    }
   }
 }
