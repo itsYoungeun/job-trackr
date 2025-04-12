@@ -3,19 +3,7 @@ import { Firestore, collection, collectionData, query, where, addDoc, doc, updat
 import { Observable, of, BehaviorSubject } from 'rxjs';
 import { AuthService } from './auth.service';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-
-export interface Job {
-  id?: string;
-  uid?: string;
-  company: string;
-  image: string;
-  position: string;
-  salary: string;
-  location: string;
-  appliedDate: string;
-  status: 'Pending' | 'Interview' | 'Rejected';
-  description?: string;
-}
+import { Job } from '../core/models/job.model';
 
 @Injectable({
   providedIn: 'root',
