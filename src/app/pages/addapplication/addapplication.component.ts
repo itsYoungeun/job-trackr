@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Job, JobService } from '../../services/job.service';
+import { Job } from '../../core/models/job.model';
+import { JobService } from '../../services/job.service';
 import { NavheaderComponent } from '../../components/navheader/navheader.component';
 import { AuthService } from '../../services/auth.service';
 

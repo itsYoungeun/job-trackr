@@ -1,8 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Job } from '../../services/job.service';
-
+import { Job } from '../../core/models/job.model';
 @Component({
   selector: 'jobdescription',
   imports: [CommonModule, FormsModule],

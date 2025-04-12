@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
-import { Job, JobService } from '../../services/job.service';
+import { Job } from '../../core/models/job.model';
+import { JobService } from '../../services/job.service';
 import { CommonModule } from '@angular/common';
 import { JobComponent } from '../job/job.component';
 
@@ -48,7 +49,15 @@ export class JoblistComponent implements OnInit {
         filtered.sort((a, b) => this.parseSalary(b.salary) - this.parseSalary(a.salary));
         break;
       case 'status':
-        filtered.sort((a, b) => a.status.localeCompare(b.status));
+        filtered.sort((a, b) => {
+          const statusCompare = a.status.localeCompare(b.status);
+          if (statusCompare !== 0) {
+            return statusCompare;
+          }
+          const dateA = new Date(a.appliedDate || '').getTime();
+          const dateB = new Date(b.appliedDate || '').getTime();
+          return dateB - dateA;
+        });
         break;
       case 'recent':
       default:
