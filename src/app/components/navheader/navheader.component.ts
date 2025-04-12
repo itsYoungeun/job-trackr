@@ -13,7 +13,6 @@ import { IconModule } from '../../shared/icon.module';
     <div class="navbar-container">
       <div class="nav-header">
         <div class="nav-left" (click)="navigateToHome()">
-          <lucide-icon name="briefcase-business" class="my-icon"></lucide-icon>
           <span class="home-button">Job Trackr</span>
         </div>
 
@@ -24,7 +23,7 @@ import { IconModule } from '../../shared/icon.module';
           </div>
 
           <div *ngIf="!isLoggedIn" class="signin-wrapper" (click)="navigateToSignin()">
-            <lucide-icon name="circle-user" class="my-icon-2"></lucide-icon>
+            <lucide-icon name="circle-user" class="my-icon"></lucide-icon>
             <span class="signin-button">Sign In</span>
           </div>
         </div>
@@ -53,11 +52,6 @@ import { IconModule } from '../../shared/icon.module';
       cursor: pointer;
     }
 
-    .my-icon {
-      width: 24px;
-      height: 24px;
-    }
-
     .home-button {
       font-size: 1.8rem;
       font-weight: bold;
@@ -75,6 +69,11 @@ import { IconModule } from '../../shared/icon.module';
       cursor: pointer;
     }
 
+    ::ng-deep .my-icon svg {
+      width: 2rem;
+      height: 2rem;
+    }
+
     .nav-right .signin-button {
       cursor: pointer;
       font-size: 1.4rem;
@@ -87,8 +86,8 @@ import { IconModule } from '../../shared/icon.module';
     }
 
     .avatar-circle {
-      width: 3rem;
-      height: 3rem;
+      width: 2rem;
+      height: 2rem;
       border-radius: 50%;
       background-color: #cbd5e0;
       display: flex;

@@ -40,7 +40,7 @@ import { IconModule } from '../../shared/icon.module';
       position: relative;
       display: flex;
       width: 82px;
-      height: 40px;
+      height: 38px;
       background-color: #e5e7eb;
       border-radius: 5px;
       padding: 4px;

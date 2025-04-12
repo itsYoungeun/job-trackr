@@ -55,7 +55,7 @@ import { TogglejobsComponent } from '../togglejobs/togglejobs.component';
     }
 
     .add-button {
-      padding: 0.5rem 1rem;
+      padding: 0.95rem 1rem;
       background-color: #3f51b5;
       color: white;
       border: none;
