@@ -15,7 +15,7 @@ import { CommonModule } from '@angular/common';
   `,
   styles: [`
     .search-input {
-      width: 12rem;
+      width: 11rem;
       padding: 0.5rem 1rem;
       font-size: 0.875rem;
       line-height: 1.7rem;

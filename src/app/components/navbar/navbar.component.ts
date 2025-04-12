@@ -9,7 +9,7 @@ import { TogglejobsComponent } from '../togglejobs/togglejobs.component';
   selector: 'navbar',
   imports: [NavheaderComponent, SearchjobComponent, FilterjobsComponent, TogglejobsComponent],
   template: `
-    <div class="navbar-wrapper">
+    <div class="navbar-container">
       <navheader></navheader>
 
       <div class="actions-container">
@@ -28,8 +28,8 @@ import { TogglejobsComponent } from '../togglejobs/togglejobs.component';
     </div>
   `,
   styles: [`
-    .navbar-wrapper {
-      padding: 0 3.5rem;
+    .actions-container {
+      padding: 1rem 3.5rem 0;
     }
 
     .job-actions {

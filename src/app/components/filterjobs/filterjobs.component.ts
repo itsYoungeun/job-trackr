@@ -28,7 +28,7 @@ import { IconModule } from '../../shared/icon.module';
     }
 
     .dropdown-btn {
-      width: 8rem;
+      width: 7rem;
       display: flex;
       align-items: center;
       padding: 0.5rem 1rem;

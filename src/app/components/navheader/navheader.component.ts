@@ -3,17 +3,21 @@ import { Router, RouterModule, NavigationEnd } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { filter } from 'rxjs/operators';
 import { AuthService } from '../../services/auth.service';
+import { IconModule } from '../../shared/icon.module';
 
 @Component({
   selector: 'navheader',
   standalone: true,
-  imports: [RouterModule, CommonModule],
+  imports: [RouterModule, CommonModule, IconModule],
   template: `
     <div class="navbar-container">
       <div class="nav-header">
-        <span class="home-button" (click)="navigateToHome()">Job Trackr</span>
+        <div class="nav-left" (click)="navigateToHome()">
+          <lucide-icon name="briefcase-business" class="my-icon"></lucide-icon>
+          <span class="home-button">Job Trackr</span>
+        </div>
 
-        <ng-container *ngIf="isHomePage">
+        <div class="nav-right" *ngIf="isHomePage">
           <span
             class="signin-button"
             *ngIf="!isLoggedIn"
@@ -28,26 +32,38 @@ import { AuthService } from '../../services/auth.service';
           >
             Sign Out
           </span>
-        </ng-container>
+        </div>
       </div>
     </div>
   `,
   styles: [`
     .navbar-container {
-      padding: 1rem;
       width: 100%;
-      box-sizing: border-box;
+      background-color: #f8f9fa;
     }
 
     .nav-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 1rem;
+      padding: 1rem 3.5rem;
+      margin: 0 auto;
+      max-width: 1600px;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+    }
+
+    .my-icon {
+      width: 24px;
+      height: 24px;
     }
 
     .home-button {
-      cursor: pointer;
       font-size: 1.8rem;
       font-weight: bold;
       transition: color 0.2s ease;
@@ -57,7 +73,7 @@ import { AuthService } from '../../services/auth.service';
       color: #3f51b5;
     }
 
-    .signin-button {
+    .nav-right .signin-button {
       cursor: pointer;
       font-size: 1.2rem;
       font-weight: bold;
@@ -67,6 +83,7 @@ import { AuthService } from '../../services/auth.service';
     .signin-button:hover {
       color: #3f51b5;
     }
+
   `]
 })
 export class NavheaderComponent {

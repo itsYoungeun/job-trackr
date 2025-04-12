@@ -67,8 +67,8 @@ import { JobdescriptionComponent } from '../jobdescription/jobdescription.compon
     .job-list {
       display: flex;
       flex-direction: column;
-      gap: 1.5rem;
-      padding: 2rem;
+      gap: 2rem;
+      padding: 2rem 3.5rem;
       margin: 1rem auto;
     }
 
@@ -88,7 +88,7 @@ import { JobdescriptionComponent } from '../jobdescription/jobdescription.compon
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 2rem;
-      padding: 2rem;
+      padding: 2rem 3.5rem;
       max-width: 1400px;
       margin: 1rem auto;
     }
@@ -207,7 +207,6 @@ import { JobdescriptionComponent } from '../jobdescription/jobdescription.compon
 
     @media (max-width: 768px) {
       .job-list, .job-grid {
-        padding: 2rem;
         gap: 1rem;
       }
 
