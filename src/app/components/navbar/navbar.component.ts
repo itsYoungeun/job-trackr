@@ -4,27 +4,34 @@ import { NavheaderComponent } from './../navheader/navheader.component';
 import { SearchjobComponent } from "../searchjobs/searchjob.component";
 import { FilterjobsComponent } from '../filterjobs/filterjobs.component';
 import { TogglejobsComponent } from '../togglejobs/togglejobs.component';
-import { JoblistComponent } from '../joblist/joblist.component';
 
 @Component({
   selector: 'navbar',
   imports: [NavheaderComponent, SearchjobComponent, FilterjobsComponent, TogglejobsComponent],
   template: `
-    <navheader></navheader>
+    <div class="navbar-wrapper">
+      <navheader></navheader>
 
-    <div class="job-actions">
-      <div class="left-actions">
-        <searchjob (search)="onSearchChange($event)"></searchjob>
-        <filterjobs (filterChange)="onFilterChange($event)"></filterjobs>
-      </div>
-      
-      <div class="right-actions">
-        <togglejobs [layout]="layout" (layoutChange)="layoutChange.emit($event)"></togglejobs>
-        <button class="add-button" (click)="navigateToApplicationForm()">Add Application</button>
+      <div class="actions-container">
+        <div class="job-actions">
+          <div class="left-actions">
+            <searchjob (search)="onSearchChange($event)"></searchjob>
+            <filterjobs (filterChange)="onFilterChange($event)"></filterjobs>
+          </div>
+
+          <div class="right-actions">
+            <togglejobs [layout]="layout" (layoutChange)="layoutChange.emit($event)"></togglejobs>
+            <button class="add-button" (click)="navigateToApplicationForm()">Add Application</button>
+          </div>
+        </div>
       </div>
     </div>
   `,
   styles: [`
+    .navbar-wrapper {
+      padding: 0 3.5rem;
+    }
+
     .job-actions {
       display: flex;
       justify-content: space-between;
@@ -66,6 +73,7 @@ import { JoblistComponent } from '../joblist/joblist.component';
       .job-actions {
         flex-direction: column;
         align-items: stretch;
+        gap: 1rem;
       }
 
       .left-actions, .right-actions {
