@@ -18,20 +18,15 @@ import { IconModule } from '../../shared/icon.module';
         </div>
 
         <div class="nav-right" *ngIf="isHomePage">
-          <span
-            class="signin-button"
-            *ngIf="!isLoggedIn"
-            (click)="navigateToSignin()"
-          >
-            Sign In
-          </span>
-          <span
-            class="signin-button"
-            *ngIf="isLoggedIn"
-            (click)="logout()"
-          >
-            Sign Out
-          </span>
+          <div *ngIf="isLoggedIn" class="signin-wrapper">
+            <div class="avatar-circle" (click)="navigateToProfile()"></div>
+            <span class="signin-button" (click)="logout()">Sign Out</span>
+          </div>
+
+          <div *ngIf="!isLoggedIn" class="signin-wrapper" (click)="navigateToSignin()">
+            <lucide-icon name="circle-user" class="my-icon-2"></lucide-icon>
+            <span class="signin-button">Sign In</span>
+          </div>
         </div>
       </div>
     </div>
@@ -73,9 +68,16 @@ import { IconModule } from '../../shared/icon.module';
       color: #3f51b5;
     }
 
+    .signin-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+    }
+
     .nav-right .signin-button {
       cursor: pointer;
-      font-size: 1.2rem;
+      font-size: 1.4rem;
       font-weight: bold;
       transition: color 0.2s ease;
     }
@@ -84,6 +86,21 @@ import { IconModule } from '../../shared/icon.module';
       color: #3f51b5;
     }
 
+    .avatar-circle {
+      width: 3rem;
+      height: 3rem;
+      border-radius: 50%;
+      background-color: #cbd5e0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .avatar-circle:hover {
+      background-color: #a0aec0;
+    }
   `]
 })
 export class NavheaderComponent {
@@ -121,5 +138,9 @@ export class NavheaderComponent {
         location.reload();
       });
     });
+  }
+
+  navigateToProfile() {
+    this.router.navigate(['/profile']);
   }
 }
