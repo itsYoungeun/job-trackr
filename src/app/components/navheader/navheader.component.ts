@@ -16,9 +16,12 @@ import { IconModule } from '../../shared/icon.module';
           <span class="home-button">Job Trackr</span>
         </div>
 
-        <div class="nav-right" *ngIf="isHomePage">
+        <div class="nav-right" *ngIf="isHomePage || isAddApplicationPage">
           <div *ngIf="isLoggedIn" class="signin-wrapper">
-            <div class="avatar-circle" (click)="navigateToProfile()"></div>
+            <div class="avatar-circle" (click)="navigateToProfile()">
+              <img *ngIf="userPhotoURL" [src]="userPhotoURL" alt="avatar" class="avatar-img" />
+              <span *ngIf="!userPhotoURL && userEmail">{{ userEmail[0] | uppercase }}</span>
+            </div>
             <span class="signin-button" (click)="logout()">Sign Out</span>
           </div>
 
@@ -86,41 +89,55 @@ import { IconModule } from '../../shared/icon.module';
     }
 
     .avatar-circle {
-      width: 2rem;
-      height: 2rem;
+      width: 2.5rem;
+      height: 2.5rem;
       border-radius: 50%;
       background-color: #cbd5e0;
       display: flex;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
-      transition: background-color 0.2s ease;
+      font-weight: bold;
+      color: white;
+      font-size: 1.2rem;
+      overflow: hidden;
     }
 
     .avatar-circle:hover {
       background-color: #a0aec0;
     }
+
+    .avatar-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   `]
 })
 export class NavheaderComponent {
+  isHomePage = false;
+  isAddApplicationPage = false;
   isOnSignInPage = false;
   isOnSignUpPage = false;
-  isHomePage = false;
   isLoggedIn = false;
+  userEmail: string | null = null;
+  userPhotoURL: string | null = null;
 
   constructor(private router: Router, private authService: AuthService) {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
         const currentUrl = this.router.url;
+        this.isHomePage = currentUrl === '/';
+        this.isAddApplicationPage = currentUrl === '/add-application' || currentUrl === '/add-application/';
         this.isOnSignInPage = currentUrl === '/sign-in';
         this.isOnSignUpPage = currentUrl === '/sign-up';
-        this.isHomePage = currentUrl === '/';
       });
 
     this.authService.currentUser$.subscribe(user => {
       this.isLoggedIn = !!user;
-    })
+      this.userEmail = user?.email ?? null;
+      this.userPhotoURL = user?.photoURL ?? null;
+    });
   }
 
   navigateToHome() {
