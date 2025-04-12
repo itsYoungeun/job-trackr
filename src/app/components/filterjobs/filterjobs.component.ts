@@ -14,15 +14,31 @@ import { IconModule } from '../../shared/icon.module';
       </button>
 
       <ul *ngIf="open" class="dropdown-menu">
-        <li (click)="select('recent')">Most Recent</li>
-        <li (click)="select('status')">App Status</li>
-        <li (click)="select('pay')">Highest Pay</li>
+        <li
+          (click)="select('recent')"
+          [ngClass]="{ 'selected-filter': selectedFilter === 'recent' }"
+        >
+          Most Recent
+        </li>
+        <li
+          (click)="select('status')"
+          [ngClass]="{ 'selected-filter': selectedFilter === 'status' }"
+        >
+          App Status
+        </li>
+        <li
+          (click)="select('pay')"
+          [ngClass]="{ 'selected-filter': selectedFilter === 'pay' }"
+        >
+          Highest Pay
+        </li>
       </ul>
     </div>
   `,
   styles: [`
     .dropdown {
       position: relative;
+      display: inline-block;
       width: 12rem;
       display: inline-block;
     }
@@ -31,7 +47,7 @@ import { IconModule } from '../../shared/icon.module';
       width: 7rem;
       display: flex;
       align-items: center;
-      padding: 0.275rem 1rem;
+      padding: 0.25rem 1rem;
       font-size: 0.875rem;
       color: #374151;
       background-color: #fff;
@@ -73,11 +89,16 @@ import { IconModule } from '../../shared/icon.module';
     .dropdown-menu li:hover {
       background-color: #f3f4f6;
     }
+
+    .selected-filter {
+      background-color: #f3f4f6;
+    }
   `]
 })
 export class FilterjobsComponent {
   @Output() filterChange = new EventEmitter<string>();
   open = false;
+  selectedFilter = 'recent';
 
   constructor(private eRef: ElementRef) {}
 
@@ -86,6 +107,8 @@ export class FilterjobsComponent {
   }
 
   select(value: string) {
+    this.selectedFilter = value;
+    localStorage.setItem('selectedFilter', value);
     this.filterChange.emit(value);
     this.open = false;
   }

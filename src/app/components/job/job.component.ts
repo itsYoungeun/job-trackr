@@ -90,7 +90,6 @@ import { JobdescriptionComponent } from '../jobdescription/jobdescription.compon
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 2rem;
       padding: 2rem 3.5rem;
-      max-width: 1400px;
       margin: 1rem auto;
     }
 
@@ -259,9 +258,9 @@ export class JobComponent implements OnInit{
 
   ngOnInit(): void {
     this.jobService.getJobs().subscribe((jobs) => {
-      this.jobs = jobs;
+      this.jobs = jobs.sort((a, b) => new Date(b.appliedDate).getTime() - new Date(a.appliedDate).getTime());
     });
-  }
+  }  
 
   getStatusClass(status: 'Pending' | 'Interview' | 'Rejected'): string {
     switch (status) {
