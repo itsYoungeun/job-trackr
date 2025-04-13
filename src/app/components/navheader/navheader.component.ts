@@ -16,7 +16,7 @@ import { IconModule } from '../../shared/icon.module';
           <span class="home-button">Job Trackr</span>
         </div>
 
-        <div class="nav-right" *ngIf="isHomePage || isAddApplicationPage">
+        <div class="nav-right" *ngIf="isHomePage || isAddApplicationPage || isProfilePage">
           <div *ngIf="isLoggedIn" class="signin-wrapper">
             <div class="avatar-circle" (click)="navigateToProfile()">
               <img *ngIf="userPhotoURL" [src]="userPhotoURL" alt="avatar" class="avatar-img" />
@@ -116,6 +116,7 @@ import { IconModule } from '../../shared/icon.module';
 export class NavheaderComponent {
   isHomePage = false;
   isAddApplicationPage = false;
+  isProfilePage = false;
   isOnSignInPage = false;
   isOnSignUpPage = false;
   isLoggedIn = false;
@@ -128,7 +129,8 @@ export class NavheaderComponent {
       .subscribe(() => {
         const currentUrl = this.router.url;
         this.isHomePage = currentUrl === '/';
-        this.isAddApplicationPage = currentUrl === '/add-application' || currentUrl === '/add-application/';
+        this.isAddApplicationPage = currentUrl === '/add-application';
+        this.isProfilePage = currentUrl === '/profile';
         this.isOnSignInPage = currentUrl === '/sign-in';
         this.isOnSignUpPage = currentUrl === '/sign-up';
       });
