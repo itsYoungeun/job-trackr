@@ -8,9 +8,7 @@ import {
   createUserWithEmailAndPassword,
   updateProfile
 } from '@angular/fire/auth';
-import { Storage, ref, uploadBytes, getDownloadURL } from '@angular/fire/storage';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +17,7 @@ export class AuthService {
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor(private auth: Auth, private zone: NgZone, private storage: Storage) {
+  constructor(private auth: Auth, private zone: NgZone) {
     onAuthStateChanged(this.auth, (user) => {
       this.zone.run(() => {
         this.currentUserSubject.next(user);
@@ -43,19 +41,30 @@ export class AuthService {
     return signOut(this.auth);
   }
 
-  updateProfileImage(userId: string, imageFile: File): Promise<void> {
+  async updateProfileImage(userId: string, imageFile: File): Promise<void> {
     const currentUser = this.auth.currentUser;
-    if (!currentUser) {
-      return Promise.reject('No user logged in');
+    if (!currentUser) return Promise.reject('No user logged in');
+
+    const formData = new FormData();
+    formData.append('file', imageFile);
+    formData.append('upload_preset', 'Job Trackr');
+    formData.append('folder', `user-profiles/${userId}`);
+
+    const res = await fetch('https://api.cloudinary.com/v1_1/dsx2dmd0f/image/upload', {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!res.ok) {
+      throw new Error('Failed to upload image');
     }
-    const storageRef = ref(this.storage, `user-profiles/${userId}/profile-image`);
-    return uploadBytes(storageRef, imageFile)
-      .then(snapshot => getDownloadURL(snapshot.ref))
-      .then(downloadURL => {
-        return updateProfile(currentUser, {
-          photoURL: downloadURL
-        });
-      });
+
+    const data = await res.json();
+    const imageUrl = data.secure_url;
+
+    return updateProfile(currentUser, {
+      photoURL: imageUrl,
+    });
   }
 
   updateDisplayName(userId: string, displayName: string): Promise<void> {

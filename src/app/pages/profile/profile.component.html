@@ -1,0 +1,77 @@
+<navheader></navheader>
+    
+<div class="profile-container" *ngIf="user">
+  <div class="profile-header">
+    <div class="profile-image" (click)="triggerFileInput()">
+      <img [src]="user.photoURL || 'assets/images/default-profile.jpg'" alt="Profile Picture">
+      <div class="image-overlay">
+        <span class="edit-image">Edit Photo</span>
+      </div>
+      <input type="file" id="profileImage" accept="image/*" (change)="uploadProfileImage($event)" hidden #fileInput>
+    </div>
+    <div class="profile-info">
+      <div class="username-container" *ngIf="!isEditingUsername">
+        <h1>{{ user.displayName || (user.email ? user.email.split('@')[0] : 'User') }}</h1>
+        <button class="edit-username-btn" (click)="startEditUsername()">
+          <lucide-icon name="pencil" class="edit-icon"></lucide-icon>
+        </button>
+      </div>
+      <div class="username-edit" *ngIf="isEditingUsername">
+        <input type="text" [(ngModel)]="editableUsername" class="username-input">
+        <div class="username-actions">
+          <button class="save-btn" (click)="saveUsername()">Save</button>
+          <button class="cancel-btn" (click)="cancelEditUsername()">Cancel</button>
+        </div>
+      </div>
+      <p class="user-email">{{ user.email }}</p>
+    </div>
+  </div>
+  
+  <div class="stats-section">
+    <h2>Application Stats</h2>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value">{{ jobs.length }}</div>
+        <div class="stat-label">Total Applications</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">{{ getPendingCount() }}</div>
+        <div class="stat-label">Pending</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">{{ getInterviewCount() }}</div>
+        <div class="stat-label">Interviews</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">{{ getRejectedCount() }}</div>
+        <div class="stat-label">Rejected</div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="recent-activity">
+    <h2>Recent Applications</h2>
+    <div class="recent-applications" *ngIf="getRecentJobs().length > 0; else noApplications">
+      <div class="application-item" *ngFor="let job of getRecentJobs()">
+        <div class="company-logo">
+          <img [src]="job.image || 'assets/images/default-company.png'" alt="{{ job.company }}">
+        </div>
+        <div class="application-details">
+          <h3>{{ job.position }}</h3>
+          <p class="company-name">{{ job.company }}</p>
+          <p class="application-meta">
+            <span class="location">{{ job.location }}</span> • 
+            <span class="salary">{{ job.salary }}</span>
+          </p>
+          <p class="application-date">Applied on {{ job.appliedDate }}</p>
+        </div>
+        <div class="application-status" [ngClass]="job.status.toLowerCase()">
+          {{ job.status }}
+        </div>
+      </div>
+    </div>
+    <ng-template #noApplications>
+      <p class="no-data">No recent job applications found.</p>
+    </ng-template>
+  </div>
+</div>
