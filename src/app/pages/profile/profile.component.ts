@@ -18,10 +18,10 @@ import { IconModule } from '../../shared/icon.module';
     
     <div class="profile-container" *ngIf="user">
       <div class="profile-header">
-        <div class="profile-avatar" (click)="triggerFileInput()">
-          <img [src]="user.photoURL || '/src/assets/images/default-profile.jpg'" alt="Profile Picture">
-          <div class="avatar-overlay">
-            <span class="change-avatar-text">Change Photo</span>
+        <div class="profile-image" (click)="triggerFileInput()">
+          <img [src]="user.photoURL || 'assets/images/default-profile.jpg'" alt="Profile Picture">
+          <div class="image-overlay">
+            <span class="edit-image">Edit Photo</span>
           </div>
           <input type="file" id="profileImage" accept="image/*" (change)="uploadProfileImage($event)" hidden #fileInput>
         </div>
@@ -107,7 +107,7 @@ import { IconModule } from '../../shared/icon.module';
       border-bottom: 1px solid #e0e0e0;
     }
     
-    .profile-avatar {
+    .profile-image {
       margin-right: 1.5rem;
       position: relative;
       cursor: pointer;
@@ -117,7 +117,7 @@ import { IconModule } from '../../shared/icon.module';
       overflow: hidden;
     }
     
-    .profile-avatar img {
+    .profile-image img {
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -126,7 +126,7 @@ import { IconModule } from '../../shared/icon.module';
       transition: filter 0.3s ease;
     }
     
-    .avatar-overlay {
+    .image-overlay {
       position: absolute;
       top: 0;
       left: 0;
@@ -141,18 +141,18 @@ import { IconModule } from '../../shared/icon.module';
       border-radius: 50%;
     }
     
-    .change-avatar-text {
+    .edit-image {
       color: white;
       font-size: 0.8rem;
       text-align: center;
       padding: 0.3rem;
     }
     
-    .profile-avatar:hover img {
+    .profile-image:hover img {
       filter: blur(1px);
     }
     
-    .profile-avatar:hover .avatar-overlay {
+    .profile-image:hover .image-overlay {
       opacity: 1;
     }
     
