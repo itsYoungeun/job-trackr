@@ -1,26 +1,44 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { NavheaderComponent } from '../../components/navheader/navheader.component';
 import { JobService } from '../../services/job.service';
 import { AuthService } from '../../services/auth.service';
 import { Job } from '../../core/models/job.model';
 import { User } from '../../core/models/user.model';
 import { Subscription } from 'rxjs';
+import { IconModule } from '../../shared/icon.module';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, NavheaderComponent],
+  imports: [CommonModule, FormsModule, NavheaderComponent, IconModule],
   template: `
     <navheader></navheader>
     
     <div class="profile-container" *ngIf="user">
       <div class="profile-header">
-        <div class="profile-avatar">
-          <img [src]="user.photoURL || 'assets/images/default-avatar.png'" alt="Profile Picture">
+        <div class="profile-avatar" (click)="triggerFileInput()">
+          <img [src]="user.photoURL || '/src/assets/images/default-profile.jpg'" alt="Profile Picture">
+          <div class="avatar-overlay">
+            <span class="change-avatar-text">Change Photo</span>
+          </div>
+          <input type="file" id="profileImage" accept="image/*" (change)="uploadProfileImage($event)" hidden #fileInput>
         </div>
         <div class="profile-info">
-          <h1>{{ user.email ? user.email.split('@')[0] : 'User' }}</h1>
+          <div class="username-container" *ngIf="!isEditingUsername">
+            <h1>{{ user.displayName || (user.email ? user.email.split('@')[0] : 'User') }}</h1>
+            <button class="edit-username-btn" (click)="startEditUsername()">
+              <lucide-icon name="pencil" class="edit-icon"></lucide-icon>
+            </button>
+          </div>
+          <div class="username-edit" *ngIf="isEditingUsername">
+            <input type="text" [(ngModel)]="editableUsername" class="username-input">
+            <div class="username-actions">
+              <button class="save-btn" (click)="saveUsername()">Save</button>
+              <button class="cancel-btn" (click)="cancelEditUsername()">Cancel</button>
+            </div>
+          </div>
           <p class="user-email">{{ user.email }}</p>
         </div>
       </div>
@@ -91,14 +109,107 @@ import { Subscription } from 'rxjs';
     
     .profile-avatar {
       margin-right: 1.5rem;
-    }
-    
-    .profile-avatar img {
+      position: relative;
+      cursor: pointer;
       width: 120px;
       height: 120px;
       border-radius: 50%;
+      overflow: hidden;
+    }
+    
+    .profile-avatar img {
+      width: 100%;
+      height: 100%;
       object-fit: cover;
       border: 3px solid #f0f0f0;
+      border-radius: 50%;
+      transition: filter 0.3s ease;
+    }
+    
+    .avatar-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      border-radius: 50%;
+    }
+    
+    .change-avatar-text {
+      color: white;
+      font-size: 0.8rem;
+      text-align: center;
+      padding: 0.3rem;
+    }
+    
+    .profile-avatar:hover img {
+      filter: blur(1px);
+    }
+    
+    .profile-avatar:hover .avatar-overlay {
+      opacity: 1;
+    }
+    
+    .username-container {
+      display: flex;
+      align-items: center;
+    }
+    
+    .edit-username-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.3rem;
+      margin-left: 0.5rem;
+    }
+    
+    .edit-icon {
+      width: 16px;
+      height: 16px;
+      color: #666;
+    }
+    
+    .username-edit {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 0.5rem;
+    }
+    
+    .username-input {
+      padding: 0.5rem;
+      font-size: 1.5rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      margin-bottom: 0.5rem;
+    }
+    
+    .username-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+    
+    .save-btn, .cancel-btn {
+      padding: 0.4rem 1rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    
+    .save-btn {
+      background-color: #4caf50;
+      color: white;
+    }
+    
+    .cancel-btn {
+      background-color: #f5f5f5;
+      color: #333;
     }
     
     .profile-info h1 {
@@ -277,27 +388,31 @@ export class ProfileComponent implements OnInit, OnDestroy {
   jobs: Job[] = [];
   private subscriptions: Subscription[] = [];
   
+  isEditingUsername: boolean = false;
+  editableUsername: string = '';
+  
   constructor(
     private authService: AuthService,
     private jobService: JobService
   ) {}
   
   ngOnInit(): void {
-    // Subscribe to current user
     const userSub = this.authService.currentUser$.subscribe(authUser => {
       if (authUser) {
         this.user = {
           uid: authUser.uid,
           email: authUser.email || '',
-          photoURL: authUser.photoURL || undefined
+          photoURL: authUser.photoURL || undefined,
+          displayName: authUser.displayName || undefined
         };
+        this.editableUsername = this.user.displayName || 
+          (this.user.email ? this.user.email.split('@')[0] : 'User');
       } else {
         this.user = null;
       }
     });
     this.subscriptions.push(userSub);
     
-    // Get jobs
     const jobSub = this.jobService.getJobs().subscribe(jobs => {
       this.jobs = jobs;
     });
@@ -305,11 +420,59 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
   
   ngOnDestroy(): void {
-    // Clean up subscriptions
     this.subscriptions.forEach(sub => sub.unsubscribe());
   }
   
-  // Helper methods to calculate stats
+  // Updated to work with a ViewChild reference
+  triggerFileInput(): void {
+    const fileInput = document.getElementById('profileImage') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.click();
+    }
+  }
+  
+  uploadProfileImage(event: Event): void {
+    const fileInput = event.target as HTMLInputElement;
+    if (fileInput.files && fileInput.files[0] && this.user) {
+      const file = fileInput.files[0];
+      
+      this.authService.updateProfileImage(this.user.uid, file)
+        .then(() => {
+          console.log('Profile image updated successfully');
+        })
+        .catch(error => {
+          console.error('Error updating profile image:', error);
+        });
+    }
+  }
+  
+  startEditUsername(): void {
+    this.isEditingUsername = true;
+  }
+  
+  saveUsername(): void {
+    if (this.user && this.editableUsername.trim()) {
+      this.authService.updateDisplayName(this.user.uid, this.editableUsername.trim())
+        .then(() => {
+          if (this.user) {
+            this.user.displayName = this.editableUsername.trim();
+          }
+          this.isEditingUsername = false;
+        })
+        .catch(error => {
+          console.error('Error updating display name:', error);
+        });
+    }
+  }
+  
+  cancelEditUsername(): void {
+    if (this.user) {
+      this.editableUsername = this.user.displayName || 
+        (this.user.email ? this.user.email.split('@')[0] : 'User');
+    }
+    this.isEditingUsername = false;
+  }
+  
   getPendingCount(): number {
     return this.jobs.filter(job => job.status === 'Pending').length;
   }
@@ -322,7 +485,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
     return this.jobs.filter(job => job.status === 'Rejected').length;
   }
   
-  // Get 5 most recent jobs
   getRecentJobs(): Job[] {
     return [...this.jobs]
       .sort((a, b) => {
