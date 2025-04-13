@@ -5,6 +5,7 @@ import { Job } from '../../core/models/job.model';
 import { JobService } from '../../services/job.service';
 import { NavheaderComponent } from '../../components/navheader/navheader.component';
 import { AuthService } from '../../services/auth.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'addapplication',
@@ -110,7 +111,11 @@ import { AuthService } from '../../services/auth.service';
   
 })
 export class AddapplicationComponent {
-  constructor(private jobService: JobService, private authService: AuthService) {}
+  constructor(
+    private jobService: JobService, 
+    private authService: AuthService, 
+    private toastr: ToastrService
+  ) {}
 
   job = {
     company: '',
@@ -129,11 +134,11 @@ export class AddapplicationComponent {
     
     this.jobService.addJob(jobWithStatus)
       .then(() => {
-        console.log('Job successfully added');
+        this.toastr.success('Successfully added job!');
         this.resetForm();
       })
       .catch((error) => {
-        console.error('Error adding job:', error);
+        this.toastr.error('Failed to add job');
       });
   }
 

@@ -1,3 +1,4 @@
+@use 'ngx-toastr/toastr' as *;
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
 * {
@@ -10,4 +11,27 @@ html, body {
 
 *, *::before, *::after {
   box-sizing: inherit;
+}
+
+.custom-toast {
+  width: 8rem;
+  font-size: 0.95rem;
+  border-radius: 8px;
+  padding: 12px 16px;
+  background-color: #3f51b5 !important;
+  color: white !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.toast-success {
+  background-color: #4caf50 !important;
+}
+
+.toast-error {
+  background-color: #f44336 !important;
+}
+
+.toast-bottom-right {
+  bottom: 1.5rem;
+  right: 1.5rem;
 }
