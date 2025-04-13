@@ -41,31 +41,39 @@ export class AuthService {
     return signOut(this.auth);
   }
 
-  async updateProfileImage(userId: string, imageFile: File): Promise<void> {
+  async updateProfileImage(userId: string, imageFile: File | null): Promise<void> {
     const currentUser = this.auth.currentUser;
     if (!currentUser) return Promise.reject('No user logged in');
-
+  
+    if (!imageFile) {
+      return updateProfile(currentUser, {
+        photoURL: '',
+      }).then(() => {
+        this.currentUserSubject.next({...currentUser, photoURL: ''});
+      });
+    }
+  
     const formData = new FormData();
     formData.append('file', imageFile);
     formData.append('upload_preset', 'Job Trackr');
     formData.append('folder', `user-profiles/${userId}`);
-
+  
     const res = await fetch('https://api.cloudinary.com/v1_1/dsx2dmd0f/image/upload', {
       method: 'POST',
       body: formData,
     });
-
+  
     if (!res.ok) {
       throw new Error('Failed to upload image');
     }
-
+  
     const data = await res.json();
     const imageUrl = data.secure_url;
-
+  
     return updateProfile(currentUser, {
       photoURL: imageUrl,
     });
-  }
+  }  
 
   updateDisplayName(userId: string, displayName: string): Promise<void> {
     const currentUser = this.auth.currentUser;

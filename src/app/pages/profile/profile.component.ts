@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { JobService } from '../../services/job.service';
@@ -17,6 +17,7 @@ import { NavheaderComponent } from "../../components/navheader/navheader.compone
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit, OnDestroy {
+  @ViewChild('fileInput') fileInputRef!: ElementRef<HTMLInputElement>;
   user: User | null = null;
   jobs: Job[] = [];
   private subscriptions: Subscription[] = [];
@@ -24,7 +25,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   isEditingUsername: boolean = false;
   editableUsername: string = '';
   uploading: boolean = false;
-
+  showImageMenu = false;
   
   constructor(
     private authService: AuthService,
@@ -59,9 +60,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
   
   triggerFileInput(): void {
-    const fileInput = document.getElementById('profileImage') as HTMLInputElement;
-    if (fileInput) {
-      fileInput.click();
+    if (this.fileInputRef) {
+      this.fileInputRef.nativeElement.click();
+    } else {
+      console.error('File input not found');
     }
   }
   
@@ -73,26 +75,44 @@ export class ProfileComponent implements OnInit, OnDestroy {
   
     this.uploading = true;
   
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('upload_preset', 'Job Trackr');
-  
     try {
-      const response = await fetch('https://api.cloudinary.com/v1_1/dsx2dmd0f/image/upload', {
-        method: 'POST',
-        body: formData,
-      });
-  
-      const data = await response.json();
-      if (data.secure_url) {
-        await this.authService.updateProfileImage(this.user.uid, data.secure_url);
-      }
+      await this.authService.updateProfileImage(this.user.uid, file);
     } catch (error) {
       console.error('Image upload failed:', error);
     } finally {
       this.uploading = false;
     }
-  }  
+  }   
+
+  toggleImageMenu(event: MouseEvent): void {
+    event.stopPropagation();
+    console.log('Clicked profile image');
+    this.showImageMenu = !this.showImageMenu;
+    console.log('Menu visible?', this.showImageMenu);
+  }
+  
+  closeImageMenu(): void {
+    this.showImageMenu = false;
+  }
+  
+  clearProfileImage(): void {
+    if (this.user) {
+      this.uploading = true;
+      this.authService.updateProfileImage(this.user.uid, null)
+        .then(() => {
+          if (this.user) {
+            this.user.photoURL = undefined;
+          }
+          this.closeImageMenu();
+        })
+        .catch(error => {
+          console.error('Error removing profile image:', error);
+        })
+        .finally(() => {
+          this.uploading = false;
+        });
+    }
+  }
   
   startEditUsername(): void {
     this.isEditingUsername = true;
@@ -141,5 +161,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
         return dateB.getTime() - dateA.getTime();
       })
       .slice(0, 5);
+  }
+
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    const clickedInside = target.closest('.profile-image') || target.closest('.image-menu');
+    if (!clickedInside && this.showImageMenu) {
+      this.showImageMenu = false;
+    }
   }
 }
