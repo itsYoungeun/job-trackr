@@ -18,11 +18,18 @@ import { IconModule } from '../../shared/icon.module';
 
         <div class="nav-right" *ngIf="isHomePage || isAddApplicationPage || isProfilePage">
           <div *ngIf="isLoggedIn" class="signin-wrapper">
-            <div class="avatar-circle" (click)="navigateToProfile()">
-              <img *ngIf="userPhotoURL" [src]="userPhotoURL" alt="avatar" class="avatar-img" />
-              <span *ngIf="!userPhotoURL && userEmail">{{ userEmail[0] | uppercase }}</span>
+            <div class="avatar-wrapper" (click)="toggleDropdown($event)" tabindex="0">
+              <div class="avatar-circle">
+                <img *ngIf="userPhotoURL" [src]="userPhotoURL" alt="avatar" class="avatar-img" />
+                <span *ngIf="!userPhotoURL && userEmail">{{ userEmail[0] | uppercase }}</span>
+              </div>
+
+              <div *ngIf="showDropdown" class="dropdown-menu" (click)="$event.stopPropagation()">
+                <div class="dropdown-item" (click)="navigateToProfile()">Profile</div>
+                <div class="dropdown-item" (click)="toggleTheme()">Toggle Theme</div>
+                <div class="dropdown-item" (click)="logout()">Sign Out</div>
+              </div>
             </div>
-            <span class="signin-button" (click)="logout()">Sign Out</span>
           </div>
 
           <div *ngIf="!isLoggedIn" class="signin-wrapper" (click)="navigateToSignin()">
@@ -111,6 +118,33 @@ import { IconModule } from '../../shared/icon.module';
       height: 100%;
       object-fit: cover;
     }
+
+    .avatar-wrapper {
+      position: relative;
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      top: 3rem;
+      right: 0;
+      background-color: var(--card-bg);
+      border: 1px solid #ccc;
+      border-radius: 0.5rem;
+      padding: 0.5rem 0;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      z-index: 1000;
+      min-width: 150px;
+    }
+
+    .dropdown-item {
+      padding: 0.75rem 1rem;
+      cursor: pointer;
+      font-size: 1.4rem;
+    }
+
+    .dropdown-item:hover {
+      background-color: var(--hover-bg);
+    }
   `]
 })
 export class NavheaderComponent {
@@ -122,6 +156,16 @@ export class NavheaderComponent {
   isLoggedIn = false;
   userEmail: string | null = null;
   userPhotoURL: string | null = null;
+  showDropdown = false;
+  isDarkMode = false;
+
+  ngAfterViewInit() {
+    document.addEventListener('click', this.closeDropdown);
+  }
+  
+  ngOnDestroy() {
+    document.removeEventListener('click', this.closeDropdown);
+  }  
 
   constructor(private router: Router, private authService: AuthService) {
     this.router.events
@@ -160,5 +204,25 @@ export class NavheaderComponent {
 
   navigateToProfile() {
     this.router.navigate(['/profile']);
+  }
+
+  toggleDropdown(event: MouseEvent) {
+    event.stopPropagation();
+    this.showDropdown = !this.showDropdown;
+  }  
+  
+  toggleTheme() {
+    this.isDarkMode = !this.isDarkMode;
+    const theme = this.isDarkMode ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', theme);
+    this.showDropdown = false;
+  }
+
+  closeDropdown = (event: MouseEvent) => {
+    const target = event.target as HTMLElement;
+    const clickedInside = target.closest('.avatar-wrapper');
+    if (!clickedInside) {
+      this.showDropdown = false;
+    }
   }
 }
