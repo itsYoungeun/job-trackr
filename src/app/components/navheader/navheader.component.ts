@@ -186,6 +186,10 @@ export class NavheaderComponent {
       this.userEmail = user?.email ?? null;
       this.userPhotoURL = user?.photoURL ?? null;
     });
+
+    const savedTheme = localStorage.getItem('theme');
+    this.isDarkMode = savedTheme === 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme || 'light');
   }
 
   navigateToHome() {
@@ -217,6 +221,7 @@ export class NavheaderComponent {
     this.isDarkMode = !this.isDarkMode;
     const theme = this.isDarkMode ? 'dark' : 'light';
     document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
     this.showDropdown = false;
   }
 

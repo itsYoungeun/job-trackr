@@ -7,20 +7,27 @@ import { JoblistComponent } from "../../components/joblist/joblist.component";
   selector: 'home',
   imports: [CommonModule, NavbarComponent, JoblistComponent],
   template: `
-    <navbar 
-      [layout]="layout"
-      (layoutChange)="layout = $event"
-      (filterChange)="onFilterChange($event)"
-      (searchChange)="onSearchChange($event)">
-    </navbar>
+    <div class="home-container">
+      <navbar 
+        [layout]="layout"
+        (layoutChange)="layout = $event"
+        (filterChange)="onFilterChange($event)"
+        (searchChange)="onSearchChange($event)">
+      </navbar>
 
-    <joblist 
-      [layout]="layout"
-      [filter]="filter"
-      [searchTerm]="searchTerm">
-    </joblist>
+      <joblist 
+        [layout]="layout"
+        [filter]="filter"
+        [searchTerm]="searchTerm">
+      </joblist>
+    </div>
   `,
-  styles: ``
+  styles: [`
+  .home-container {
+    background-color: var(--bg-color-2);
+    height: 100%;
+  }  
+  `]
 })
 export class HomeComponent {
   layout: 'grid' | 'list' = 'grid';
