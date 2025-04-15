@@ -26,7 +26,7 @@ import { IconModule } from '../../shared/icon.module';
 
               <div *ngIf="showDropdown" class="dropdown-menu" (click)="$event.stopPropagation()">
                 <div class="dropdown-item" (click)="navigateToProfile()">Profile</div>
-                <div class="dropdown-item" (click)="toggleTheme()">Toggle Theme</div>
+                <div class="dropdown-item" (click)="toggleTheme()">Toggle Theme: {{theme}}</div>
                 <div class="dropdown-item" (click)="logout()">Sign Out</div>
               </div>
             </div>
@@ -43,7 +43,7 @@ import { IconModule } from '../../shared/icon.module';
   styles: [`
     .navbar-container {
       width: 100%;
-      background-color: #f8f9fa;
+      background-color: var(--bg-color);
     }
 
     .nav-header {
@@ -63,6 +63,7 @@ import { IconModule } from '../../shared/icon.module';
     }
 
     .home-button {
+      color: var(--text-color);
       font-size: 1.8rem;
       font-weight: bold;
       transition: color 0.2s ease;
@@ -128,18 +129,19 @@ import { IconModule } from '../../shared/icon.module';
       top: 3rem;
       right: 0;
       background-color: var(--card-bg);
+      color: var(--text-color);
       border: 1px solid #ccc;
       border-radius: 0.5rem;
       padding: 0.5rem 0;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
       z-index: 1000;
-      min-width: 150px;
+      min-width: 200px;
     }
 
     .dropdown-item {
       padding: 0.75rem 1rem;
       cursor: pointer;
-      font-size: 1.4rem;
+      font-size: 1rem;
     }
 
     .dropdown-item:hover {
@@ -148,16 +150,16 @@ import { IconModule } from '../../shared/icon.module';
   `]
 })
 export class NavheaderComponent {
+  userEmail: string | null = null;
+  userPhotoURL: string | null = null;
   isHomePage = false;
   isAddApplicationPage = false;
   isProfilePage = false;
   isOnSignInPage = false;
   isOnSignUpPage = false;
   isLoggedIn = false;
-  userEmail: string | null = null;
-  userPhotoURL: string | null = null;
-  showDropdown = false;
   isDarkMode = false;
+  showDropdown = false;
 
   ngAfterViewInit() {
     document.addEventListener('click', this.closeDropdown);
@@ -216,6 +218,10 @@ export class NavheaderComponent {
     const theme = this.isDarkMode ? 'dark' : 'light';
     document.documentElement.setAttribute('data-theme', theme);
     this.showDropdown = false;
+  }
+
+  get theme() {
+    return this.isDarkMode ? 'Dark' : 'Light';
   }
 
   closeDropdown = (event: MouseEvent) => {
