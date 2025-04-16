@@ -24,7 +24,7 @@ import { JoblistComponent } from "../../components/joblist/joblist.component";
   `,
   styles: [`
   .home-container {
-    background-color: var(--bg-color-2);
+    background-color: var(--bg-color-3);
     height: 100%;
   }  
   `]

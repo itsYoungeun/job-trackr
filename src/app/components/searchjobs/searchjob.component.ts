@@ -19,17 +19,18 @@ import { CommonModule } from '@angular/common';
       padding: 0.5rem 1rem;
       font-size: 0.875rem;
       line-height: 1.7rem;
-      color: #374151;
-      background-color: #fff;
-      border: 1px solid #d1d5db;
+      color: var(--text-color);
+      background-color: var(--bg-color-2);
+      border: 1px solid var(--border-color);
       border-radius: 0.5rem;
       outline: none;
       box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
       transition: border-color 0.2s ease;
     }
 
-    .search-input:focus {
-      border-color: #6366f1;
+    .search-input:focus,
+    .search-input:hover {
+      border-color: var(--border-hover);
     }
 
     .search-input::placeholder {

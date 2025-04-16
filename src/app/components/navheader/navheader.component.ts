@@ -128,7 +128,7 @@ import { IconModule } from '../../shared/icon.module';
       position: absolute;
       top: 3rem;
       right: 0;
-      background-color: var(--card-bg);
+      background-color: var(--bg-color);
       color: var(--text-color);
       border: 1px solid #ccc;
       border-radius: 0.5rem;
@@ -145,7 +145,7 @@ import { IconModule } from '../../shared/icon.module';
     }
 
     .dropdown-item:hover {
-      background-color: var(--hover-bg);
+      background-color: var(--bg-color-2);
     }
   `]
 })
