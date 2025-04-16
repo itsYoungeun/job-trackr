@@ -35,17 +35,17 @@ import { ToastrService } from 'ngx-toastr';
 
         <label>
           Salary:
-          <input type="text" name="salary" [(ngModel)]="job.salary" />
+          <input type="text" name="salary" [(ngModel)]="job.salary" required />
         </label>
 
         <label>
           Location:
-          <input type="text" name="location" [(ngModel)]="job.location" />
+          <input type="text" name="location" [(ngModel)]="job.location" required />
         </label>
 
         <label>
           Date of Application:
-          <input type="date" name="appliedDate" [(ngModel)]="job.appliedDate" />
+          <input type="date" name="appliedDate" [(ngModel)]="job.appliedDate" required />
         </label>
 
         <button type="submit" [disabled]="jobForm.invalid">Submit Application</button>
@@ -57,7 +57,8 @@ import { ToastrService } from 'ngx-toastr';
       max-width: 500px;
       margin: 2rem auto;
       padding: 2rem;
-      background-color: #f7f7f7;
+      color: var(--text-color);
+      background-color: var(--bg-color-2);
       border-radius: 10px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
@@ -82,16 +83,23 @@ import { ToastrService } from 'ngx-toastr';
     input {
       padding: 0.75rem;
       margin-top: 0.5rem;
-      border: 1px solid #ccc;
+      border: 1px solid var(--border-color);
+      color: var(--text-color);
+      background-color: var(--card-bg);
       border-radius: 6px;
       font-size: 1rem;
+    }
+
+    input:focus,
+    input:hover {
+      border-color: var(--border-hover);
     }
   
     button {
       margin-top: 1rem;
       padding: 0.75rem;
       background-color: #3f51b5;
-      color: white;
+      color: var(--text-color);
       font-weight: 600;
       border: none;
       border-radius: 6px;
@@ -104,8 +112,15 @@ import { ToastrService } from 'ngx-toastr';
     }
   
     button:disabled {
-      background-color: #ccc;
+      background-color: var(--toggle-color);
       cursor: not-allowed;
+    }
+
+    input:-webkit-autofill {
+      background-color: var(--bg-color-3) !important;
+      color: var(--text-color) !important;
+      -webkit-box-shadow: 0 0 0px 1000px var(--bg-color-3) inset !important;
+      transition: background-color 9999s ease-out, color 9999s ease-out;
     }
   `]
   

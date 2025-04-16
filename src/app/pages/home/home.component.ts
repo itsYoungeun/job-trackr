@@ -7,7 +7,6 @@ import { JoblistComponent } from "../../components/joblist/joblist.component";
   selector: 'home',
   imports: [CommonModule, NavbarComponent, JoblistComponent],
   template: `
-    <div class="home-container">
       <navbar 
         [layout]="layout"
         (layoutChange)="layout = $event"
@@ -20,13 +19,8 @@ import { JoblistComponent } from "../../components/joblist/joblist.component";
         [filter]="filter"
         [searchTerm]="searchTerm">
       </joblist>
-    </div>
   `,
   styles: [`
-  .home-container {
-    background-color: var(--bg-color-3);
-    height: 100%;
-  }  
   `]
 })
 export class HomeComponent {
