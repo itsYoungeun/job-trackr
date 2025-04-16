@@ -70,9 +70,11 @@ export class AuthService {
     const data = await res.json();
     const imageUrl = data.secure_url;
   
-    return updateProfile(currentUser, {
-      photoURL: imageUrl,
-    });
+    await updateProfile(currentUser, {photoURL: imageUrl});
+
+    this.currentUserSubject.next({ ...currentUser, photoURL: imageUrl });
+
+    return imageUrl;
   }  
 
   updateDisplayName(userId: string, displayName: string): Promise<void> {

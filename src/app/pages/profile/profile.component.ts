@@ -76,7 +76,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.uploading = true;
   
     try {
-      await this.authService.updateProfileImage(this.user.uid, file);
+      const newPhotoURL = await this.authService.updateProfileImage(this.user.uid, file);
+      if (this.user && typeof newPhotoURL === 'string') {
+        this.user.photoURL = newPhotoURL;
+      }
     } catch (error) {
       console.error('Image upload failed:', error);
     } finally {
