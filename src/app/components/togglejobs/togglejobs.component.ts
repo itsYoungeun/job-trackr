@@ -18,14 +18,14 @@ import { IconModule } from '../../shared/icon.module';
           (click)="changeLayout('grid')"
           title="Grid View"
         >
-          <lucide-icon name="layout-grid" size="20"></lucide-icon>
+          <lucide-icon name="layout-grid" class="toggle-icon" size="20"></lucide-icon>
         </button>
         <button 
           class="toggle-button" 
           (click)="changeLayout('list')"
           title="List View"
         >
-          <lucide-icon name="list" size="20"></lucide-icon>
+          <lucide-icon name="list" class="toggle-icon" size="20"></lucide-icon>
         </button>
       </div>
     </div>
@@ -41,7 +41,7 @@ import { IconModule } from '../../shared/icon.module';
       display: flex;
       width: 82px;
       height: 38px;
-      background-color: #e5e7eb;
+      background-color: var(--bg-color-2);
       border-radius: 5px;
       padding: 4px;
       box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
@@ -56,8 +56,11 @@ import { IconModule } from '../../shared/icon.module';
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 9999px;
       transition: background-color 0.3s;
+    }
+
+    .toggle-icon {
+      color: var(--text-color);
     }
 
     .slider-indicator {
@@ -65,7 +68,7 @@ import { IconModule } from '../../shared/icon.module';
       top: 4px;
       bottom: 4px;
       width: 41px;
-      background-color: white;
+      background-color: var(--toggle-color);
       border-radius: 4px;
       box-shadow: 0 1px 3px rgba(0,0,0,0.1);
       transition: transform 0.3s ease;
