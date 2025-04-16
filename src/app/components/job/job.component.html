@@ -6,48 +6,49 @@
 ></jobdescription>
 
 <div [ngClass]="layout === 'grid' ? 'job-grid' : 'job-list'">
-  <div *ngFor="let job of jobs" class="job-card" (click)="openModal(job)">
-
-    <div class="job-header">
-      <div class="job-header-content">
-        <img [src]="job.image" alt="Company Logo" class="job-logo" />
-        <div class="job-info-block">
-          <h3 class="job-title">{{ job.position }}</h3>
-          <div class="job-company">
-            <lucide-icon name="building2" class="my-icon"></lucide-icon>
-            <span>{{ job.company }}</span>
+  <div *ngFor="let job of jobs" class="job-cards" (click)="openModal(job)">
+    <div class="job-card">
+      <div class="job-header">
+        <div class="job-header-content">
+          <img [src]="job.image" alt="Company Logo" class="job-logo" />
+          <div class="job-info-block">
+            <h3 class="job-title">{{ job.position }}</h3>
+            <div class="job-company">
+              <lucide-icon name="building2" class="my-icon"></lucide-icon>
+              <span>{{ job.company }}</span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-
-    <div class="job-details">
-      <div class="job-location">
-        <lucide-icon name="map-pin" class="my-icon"></lucide-icon>
-        <span [ngClass]="{ 'clamp-1': layout === 'grid' }">
-          {{ job.location }}
+  
+      <div class="job-details">
+        <div class="job-location">
+          <lucide-icon name="map-pin" class="my-icon"></lucide-icon>
+          <span [ngClass]="{ 'clamp-1': layout === 'grid' }">
+            {{ job.location }}
+          </span>
+        </div>
+  
+        <div class="job-meta">
+          <div class="job-meta-item">
+            <lucide-icon name="calendar" class="my-icon"></lucide-icon>
+            <span>{{ job.appliedDate }}</span>
+          </div>
+          <div class="job-meta-item">
+            <lucide-icon name="hand-coins" class="my-icon"></lucide-icon>
+            <span>{{ job.salary }}</span>
+          </div>
+        </div>
+  
+        <span 
+          class="status-badge" 
+          [ngClass]="getStatusClass(job.status)"
+          (click)="handleStatusClick(job); $event.stopPropagation()"
+          title="Click to cycle status"
+        >
+          {{ job.status }}
         </span>
       </div>
-
-      <div class="job-meta">
-        <div class="job-meta-item">
-          <lucide-icon name="calendar" class="my-icon"></lucide-icon>
-          <span>{{ job.appliedDate }}</span>
-        </div>
-        <div class="job-meta-item">
-          <lucide-icon name="hand-coins" class="my-icon"></lucide-icon>
-          <span>{{ job.salary }}</span>
-        </div>
-      </div>
-
-      <span 
-        class="status-badge" 
-        [ngClass]="getStatusClass(job.status)"
-        (click)="handleStatusClick(job); $event.stopPropagation()"
-        title="Click to cycle status"
-      >
-        {{ job.status }}
-      </span>
     </div>
   </div>
 </div>
