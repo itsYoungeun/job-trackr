@@ -34,13 +34,14 @@ import { IconModule } from '../../shared/icon.module';
     .slider-toggle {
       display: flex;
       justify-content: center;
+      align-items: center;
     }
 
     .slider-background {
       position: relative;
       display: flex;
-      width: 82px;
-      height: 38px;
+      width: 84px;
+      height: 44px;
       background-color: var(--bg-color-2);
       border-radius: 5px;
       padding: 4px;
@@ -61,13 +62,14 @@ import { IconModule } from '../../shared/icon.module';
 
     .toggle-icon {
       color: var(--text-color);
+      padding-top: 0.2rem;
     }
 
     .slider-indicator {
       position: absolute;
       top: 4px;
       bottom: 4px;
-      width: 41px;
+      width: 42px;
       background-color: var(--toggle-color);
       border-radius: 4px;
       box-shadow: 0 1px 3px rgba(0,0,0,0.1);

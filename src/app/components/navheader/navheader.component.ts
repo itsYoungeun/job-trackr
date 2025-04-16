@@ -126,13 +126,12 @@ import { IconModule } from '../../shared/icon.module';
 
     .dropdown-menu {
       position: absolute;
-      top: 3rem;
+      top: 3.5rem;
       right: 0;
       background-color: var(--bg-color);
       color: var(--text-color);
-      border: 1px solid #ccc;
+      border: 1px solid var(--bg-color);
       border-radius: 0.5rem;
-      padding: 0.5rem 0;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
       z-index: 1000;
       min-width: 200px;
@@ -145,7 +144,8 @@ import { IconModule } from '../../shared/icon.module';
     }
 
     .dropdown-item:hover {
-      background-color: var(--bg-color-2);
+      background-color: var(--toggle-color);
+      border-radius: 0.5rem;
     }
   `]
 })

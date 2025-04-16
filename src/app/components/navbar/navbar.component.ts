@@ -56,17 +56,18 @@ import { TogglejobsComponent } from '../togglejobs/togglejobs.component';
 
     .add-button {
       padding: 0.95rem 1rem;
-      background-color: #3f51b5;
-      color: white;
-      border: none;
-      border-radius: 4px;
+      background-color: var(--bg-color-2);
+      border: 1px solid var(--border-color);
+      border-radius: 0.5rem;
+      color: #9ca3af;;
       cursor: pointer;
       font-weight: 500;
       transition: background-color 0.2s ease;
     }
 
+    .add-button:focus,
     .add-button:hover {
-      background-color: #303f9f;
+      border-color: var(--border-hover);
     }
 
     @media (max-width: 768px) {

@@ -72,7 +72,7 @@ import { IconModule } from '../../shared/icon.module';
       margin-top: 0.25rem;
       color: var(--text-color);
       background-color: var(--bg-color);
-      border: 1px solid #e5e7eb;
+      border: 1px solid var(--bg-color);
       border-radius: 0.5rem;
       box-shadow: 0 4px 6px rgba(0,0,0,0.1);
       z-index: 10;
@@ -90,7 +90,7 @@ import { IconModule } from '../../shared/icon.module';
 
     .dropdown-menu li:hover {
       border-radius: 0.5rem;
-      background-color: var(--bg-color-2);
+      background-color: var(--toggle-color);
     }
 
     .selected-filter {
