@@ -10,6 +10,7 @@ import { environment } from '../environments/environment';
 import { provideAuth } from '@angular/fire/auth';
 import { getAuth } from 'firebase/auth';
 import { provideToastr } from './toastr.provider';
+import { provideHttpClient } from '@angular/common/http';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -19,6 +20,7 @@ export const appConfig: ApplicationConfig = {
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
     provideToastr(),
-    provideStorage(() => getStorage())
+    provideStorage(() => getStorage()),
+    provideHttpClient()
   ]
 };

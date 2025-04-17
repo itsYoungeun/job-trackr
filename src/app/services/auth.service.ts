@@ -57,32 +57,35 @@ export class AuthService {
       return;
     }
 
-    if (!imageFile) {
-      throw new Error('No image file provided for upload');
+    if (!imageFile && !publicId) {
+      throw new Error('No image file or public ID provided');
     }
   
-    const formData = new FormData();
-    formData.append('file', imageFile);
-    formData.append('upload_preset', 'Job Trackr');
-    formData.append('folder', `user-profiles/${userId}`);
+    if (imageFile) {
+      const formData = new FormData();
+      formData.append('file', imageFile);
+      formData.append('upload_preset', 'Job Trackr');
+      formData.append('folder', `user-profiles/${userId}`);
   
-    const res = await fetch('https://api.cloudinary.com/v1_1/dsx2dmd0f/image/upload', {
-      method: 'POST',
-      body: formData,
-    });
+      const res = await fetch('https://api.cloudinary.com/v1_1/dsx2dmd0f/image/upload', {
+        method: 'POST',
+        body: formData,
+      });
   
-    if (!res.ok) {
-      throw new Error('Failed to upload image');
-    }
+      if (!res.ok) {
+        throw new Error('Failed to upload image');
+      }
   
-    const data = await res.json();
-    const imageUrl = data.secure_url;
-  
-    await updateProfile(currentUser, {photoURL: imageUrl});
-    this.currentUserSubject.next({ ...currentUser, photoURL: imageUrl });
+      const data = await res.json();
+      const imageUrl = data.secure_url;
+      const publicId = data.public_id;
 
-    return imageUrl;
-  }  
+      await this.userApiService.saveProfileImageMeta(userId, imageUrl, publicId);
+  
+      await updateProfile(currentUser, { photoURL: imageUrl });
+      this.currentUserSubject.next({ ...currentUser, photoURL: imageUrl });
+    }
+  }
 
   updateDisplayName(userId: string, displayName: string): Promise<void> {
     const currentUser = this.auth.currentUser;

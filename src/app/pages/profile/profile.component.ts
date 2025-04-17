@@ -8,6 +8,7 @@ import { User } from '../../core/models/user.model';
 import { Subscription } from 'rxjs';
 import { IconModule } from '../../shared/icon.module';
 import { NavheaderComponent } from "../../components/navheader/navheader.component";
+import { UserApiService } from '../../services/userapi.service';
 
 @Component({
   selector: 'app-profile',
@@ -29,7 +30,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
   
   constructor(
     private authService: AuthService,
-    private jobService: JobService
+    private jobService: JobService,
+    private userApiService: UserApiService
   ) {}
   
   ngOnInit(): void {
@@ -41,6 +43,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
           photoURL: authUser.photoURL || undefined,
           displayName: authUser.displayName || undefined
         };
+
+        this.userApiService.getUserMeta(authUser.uid).subscribe(meta => {
+          if (meta && this.user) {
+            this.user.photoPublicId = (meta as any).photoPublicId;
+          }
+        });
+
         this.editableUsername = this.user.displayName || 
           (this.user.email ? this.user.email.split('@')[0] : 'User');
       } else {
@@ -99,13 +108,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
   
   clearProfileImage(): void {
-    if (this.user) {
+    if (this.user && this.user.photoPublicId) {
       this.uploading = true;
-      this.authService.updateProfileImage(this.user.uid, null)
+      this.authService.updateProfileImage(this.user.uid, null, this.user.photoPublicId)
         .then(() => {
-          if (this.user) {
-            this.user.photoURL = undefined;
-          }
+          this.user!.photoURL = undefined;
+          this.user!.photoPublicId = undefined;
           this.closeImageMenu();
         })
         .catch(error => {
@@ -114,8 +122,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
         .finally(() => {
           this.uploading = false;
         });
+    } else {
+      console.warn('Missing user or photoPublicId');
     }
-  }
+  }  
   
   startEditUsername(): void {
     this.isEditingUsername = true;
