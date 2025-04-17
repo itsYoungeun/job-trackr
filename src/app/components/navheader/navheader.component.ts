@@ -78,6 +78,11 @@ import { IconModule } from '../../shared/icon.module';
       align-items: center;
       gap: 0.5rem;
       cursor: pointer;
+      color: var(--text-color);
+    }
+
+    .signin-wrapper:hover {
+      color: var(--toggle-color);
     }
 
     ::ng-deep .my-icon svg {
@@ -89,11 +94,6 @@ import { IconModule } from '../../shared/icon.module';
       cursor: pointer;
       font-size: 1.4rem;
       font-weight: bold;
-      transition: color 0.2s ease;
-    }
-
-    .signin-button:hover {
-      color: #3f51b5;
     }
 
     .avatar-circle {
