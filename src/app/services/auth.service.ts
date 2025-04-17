@@ -9,6 +9,7 @@ import {
   updateProfile
 } from '@angular/fire/auth';
 import { BehaviorSubject } from 'rxjs';
+import { UserApiService } from './userapi.service';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +18,11 @@ export class AuthService {
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor(private auth: Auth, private zone: NgZone) {
+  constructor(
+    private auth: Auth, 
+    private zone: NgZone,
+    private userApiService: UserApiService
+  ) {
     onAuthStateChanged(this.auth, (user) => {
       this.zone.run(() => {
         this.currentUserSubject.next(user);
@@ -41,16 +46,19 @@ export class AuthService {
     return signOut(this.auth);
   }
 
-  async updateProfileImage(userId: string, imageFile: File | null): Promise<void> {
+  async updateProfileImage(userId: string, imageFile: File | null, publicId?: string): Promise<void> {
     const currentUser = this.auth.currentUser;
     if (!currentUser) return Promise.reject('No user logged in');
   
+    if (!imageFile && publicId) {
+      await this.userApiService.deleteProfileImage(userId, publicId).toPromise();
+      await updateProfile(currentUser, { photoURL: '' });
+      this.currentUserSubject.next({ ...currentUser, photoURL: '' });
+      return;
+    }
+
     if (!imageFile) {
-      return updateProfile(currentUser, {
-        photoURL: '',
-      }).then(() => {
-        this.currentUserSubject.next({...currentUser, photoURL: ''});
-      });
+      throw new Error('No image file provided for upload');
     }
   
     const formData = new FormData();
@@ -71,7 +79,6 @@ export class AuthService {
     const imageUrl = data.secure_url;
   
     await updateProfile(currentUser, {photoURL: imageUrl});
-
     this.currentUserSubject.next({ ...currentUser, photoURL: imageUrl });
 
     return imageUrl;
