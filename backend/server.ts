@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import imageRoute from './routes/imageRoute';
+import imageRoute from './routes/imageRoute.ts';
 
 const app = express();
 app.use(cors());
