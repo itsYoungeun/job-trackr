@@ -15,7 +15,10 @@ export class UserApiService {
   ) {}
 
   deleteProfileImage(userId: string, publicId: string) {
-    return this.http.post(`${this.apiUrl}/api/image/delete`, { userId, publicId });
+    return this.http.post(`${this.apiUrl}/api/image/delete`, {
+      public_id: publicId,
+      userId
+    });
   }
 
   async saveProfileImageMeta(userId: string, imageUrl: string, publicId: string) {
