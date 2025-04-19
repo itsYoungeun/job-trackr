@@ -4,6 +4,7 @@ import { AddapplicationComponent } from './pages/addapplication/addapplication.c
 import { SigninComponent } from './pages/signin/signin.component';
 import { SignupComponent } from './pages/signup/signup.component';
 import { ProfileComponent } from './pages/profile/profile.component';
+import { ManagejobsComponent } from './pages/managejobs/managejobs.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -11,4 +12,5 @@ export const routes: Routes = [
   { path: 'sign-up', component: SignupComponent },
   { path: 'add-application', component: AddapplicationComponent},
   { path: 'profile', component: ProfileComponent },
+  { path: 'manage', component: ManagejobsComponent }
 ];

@@ -16,7 +16,7 @@ import { IconModule } from '../../shared/icon.module';
           <span class="home-button">Job Trackr</span>
         </div>
 
-        <div class="nav-right" *ngIf="isHomePage || isAddApplicationPage || isProfilePage">
+        <div class="nav-right" *ngIf="isHomePage || isAddApplicationPage || isProfilePage || isManageJobsPage">
           <div *ngIf="isLoggedIn" class="signin-wrapper">
             <div class="avatar-wrapper" (click)="toggleDropdown($event)" tabindex="0">
               <div class="avatar-circle">
@@ -26,6 +26,7 @@ import { IconModule } from '../../shared/icon.module';
 
               <div *ngIf="showDropdown" class="dropdown-menu" (click)="$event.stopPropagation()">
                 <div class="dropdown-item" (click)="navigateToProfile()">Profile</div>
+                <div class="dropdown-item" (click)="navigateToManageJobs()">Manage Jobs</div>
                 <div class="dropdown-item" (click)="toggleTheme()">Toggle Theme: {{theme}}</div>
                 <div class="dropdown-item" (click)="logout()">Sign Out</div>
               </div>
@@ -155,6 +156,7 @@ export class NavheaderComponent {
   isHomePage = false;
   isAddApplicationPage = false;
   isProfilePage = false;
+  isManageJobsPage = false;
   isOnSignInPage = false;
   isOnSignUpPage = false;
   isLoggedIn = false;
@@ -177,6 +179,7 @@ export class NavheaderComponent {
         this.isHomePage = currentUrl === '/';
         this.isAddApplicationPage = currentUrl === '/add-application';
         this.isProfilePage = currentUrl === '/profile';
+        this.isManageJobsPage = currentUrl === '/manage';
         this.isOnSignInPage = currentUrl === '/sign-in';
         this.isOnSignUpPage = currentUrl === '/sign-up';
       });
@@ -210,6 +213,10 @@ export class NavheaderComponent {
 
   navigateToProfile() {
     this.router.navigate(['/profile']);
+  }
+
+  navigateToManageJobs() {
+    this.router.navigate(['/manage']);
   }
 
   toggleDropdown(event: MouseEvent) {
