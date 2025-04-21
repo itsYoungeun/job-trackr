@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, collectionData, query, where, addDoc, doc, updateDoc, getDocs } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, query, where, addDoc, doc, updateDoc, getDocs, deleteDoc } from '@angular/fire/firestore';
 import { Observable, of, BehaviorSubject } from 'rxjs';
 import { AuthService } from './auth.service';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
@@ -45,6 +45,11 @@ export class JobService {
     });
   }
 
+  updateJob(jobId: string, jobData: Partial<Job>): Promise<void> {
+    const jobRef = doc(this.firestore, 'jobs', jobId);
+    return updateDoc(jobRef, jobData);
+  }
+
   updateJobStatus(jobId: string, status: 'Pending' | 'Interview' | 'Rejected') {
     const jobRef = doc(this.firestore, 'jobs', jobId);
     return updateDoc(jobRef, { status });
@@ -54,4 +59,14 @@ export class JobService {
     const jobRef = doc(this.firestore, `jobs/${jobId}`);
     return updateDoc(jobRef, { description });
   }  
+
+  toggleFavorite(jobId: string, favorite: boolean): Promise<void> {
+    const jobRef = doc(this.firestore, 'jobs', jobId);
+    return updateDoc(jobRef, { favorite });
+  }
+
+  deleteJob(jobId: string): Promise<void> {
+    const jobRef = doc(this.firestore, 'jobs', jobId);
+    return deleteDoc(jobRef);
+  }
 }
