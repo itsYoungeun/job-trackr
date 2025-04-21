@@ -144,7 +144,8 @@ export class AddapplicationComponent {
   submitForm() {
     const jobWithStatus: Job = {
       ...this.job,
-      status: 'Pending'
+      status: 'Pending',
+      favorite: false
     };
     
     this.jobService.addJob(jobWithStatus)
