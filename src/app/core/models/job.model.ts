@@ -9,4 +9,5 @@ export interface Job {
   appliedDate: string;
   status: 'Pending' | 'Interview' | 'Rejected';
   description?: string;
+  favorite: boolean;
 }
