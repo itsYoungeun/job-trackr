@@ -1,0 +1,133 @@
+<navheader></navheader>
+
+<div class="container">
+  <div class="header">
+    <h1>Manage Job Applications</h1>
+    <div class="actions">
+      <searchjob (search)="onSearch($event)"></searchjob>
+    </div>
+  </div>
+
+  <!-- Job Table -->
+  <div class="table-container">
+    <table class="job-table">
+      <thead>
+        <tr>
+          <th class="favorite-header"></th>
+          <th>Company</th>
+          <th>Position</th>
+          <th>Salary</th>
+          <th>Location</th>
+          <th>Applied Date</th>
+          <th>Status</th>
+          <th class="actions-header">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let job of filteredJobs" [ngClass]="{'favorite-row': job.favorite}">
+          <td class="favorite-cell">
+            <button class="icon-btn" (click)="toggleFavorite(job)">
+              <lucide-icon [name]="job.favorite ? 'star' : 'star-off'" [class]="job.favorite ? 'favorite-icon' : ''"></lucide-icon>
+            </button>
+          </td>
+          <td>
+            <div class="company-info">
+              <img *ngIf="job.image" [src]="job.image" alt="{{ job.company }} logo" class="company-logo">
+              <span>{{ job.company }}</span>
+            </div>
+          </td>
+          <td>{{ job.position }}</td>
+          <td>{{ job.salary }}</td>
+          <td>{{ job.location }}</td>
+          <td>{{ job.appliedDate }}</td>
+          <td>
+            <div class="status-badge" [ngClass]="getStatusClass(job.status)">
+              {{ job.status }}
+            </div>
+          </td>
+          <td class="actions-cell">
+            <button class="icon-btn" (click)="openEditModal(job)">
+              <lucide-icon name="edit-3"></lucide-icon>
+            </button>
+            <button class="icon-btn delete-btn" (click)="confirmDelete(job)">
+              <lucide-icon name="trash-2"></lucide-icon>
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredJobs.length === 0">
+          <td colspan="8" class="no-jobs">No job applications found</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Edit Job Modal -->
+<div class="modal-overlay" *ngIf="showEditModal" (click)="closeEditModal($event)">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Edit Job Application</h2>
+      <button class="close-btn" (click)="closeEditModal($event)">
+        <lucide-icon name="x"></lucide-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label for="company">Company</label>
+        <input type="text" id="company" [(ngModel)]="editingJob.company">
+      </div>
+      <div class="form-group">
+        <label for="position">Position</label>
+        <input type="text" id="position" [(ngModel)]="editingJob.position">
+      </div>
+      <div class="form-group">
+        <label for="salary">Salary</label>
+        <input type="text" id="salary" [(ngModel)]="editingJob.salary">
+      </div>
+      <div class="form-group">
+        <label for="location">Location</label>
+        <input type="text" id="location" [(ngModel)]="editingJob.location">
+      </div>
+      <div class="form-group">
+        <label for="appliedDate">Applied Date</label>
+        <input type="date" id="appliedDate" [(ngModel)]="editingJob.appliedDate">
+      </div>
+      <div class="form-group">
+        <label for="status">Status</label>
+        <select id="status" [(ngModel)]="editingJob.status">
+          <option value="Pending">Pending</option>
+          <option value="Interview">Interview</option>
+          <option value="Rejected">Rejected</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea id="description" rows="4" [(ngModel)]="editingJob.description"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="cancel-btn" (click)="closeEditModal($event)">Cancel</button>
+      <button class="save-btn" (click)="saveJob()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal-overlay" *ngIf="showDeleteModal" (click)="closeDeleteModal($event)">
+  <div class="modal-content delete-modal">
+    <div class="modal-header">
+      <h2>Delete Job Application</h2>
+      <button class="close-btn" (click)="closeDeleteModal($event)">
+        <lucide-icon name="x"></lucide-icon>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>Are you sure you want to delete the job application for <strong>{{ deletingJob?.position }}</strong> at <strong>{{ deletingJob?.company }}</strong>?</p>
+      <p class="warning">This action cannot be undone.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="cancel-btn" (click)="closeDeleteModal($event)">Cancel</button>
+      <button class="delete-confirm-btn" (click)="deleteJob()">Delete</button>
+    </div>
+  </div>
+</div>

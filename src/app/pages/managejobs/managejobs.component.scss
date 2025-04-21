@@ -1,0 +1,241 @@
+.container {
+  padding: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.actions {
+  display: flex;
+  gap: 1rem;
+}
+
+/* Table Styles */
+.table-container {
+  overflow-x: auto;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: var(--bg-color-2);
+}
+
+.job-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.job-table th, .job-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.job-table th {
+  font-weight: 600;
+  color: var(--text-color-secondary);
+  background-color: var(--bg-color-3);
+}
+
+.job-table tr:last-child td {
+  border-bottom: none;
+}
+
+.job-table tbody tr:hover {
+  background-color: var(--bg-color-3);
+}
+
+.favorite-row {
+  background-color: rgba(255, 215, 0, 0.05);
+}
+
+.favorite-header, .favorite-cell {
+  width: 40px;
+  text-align: center;
+}
+
+.actions-header, .actions-cell {
+  width: 100px;
+  text-align: center;
+}
+
+/* Company Info */
+.company-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.company-logo {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+/* Status Badge */
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.status-pending {
+  background-color: #f0f9ff;
+  color: #0369a1;
+}
+
+.status-interview {
+  background-color: #ecfdf5;
+  color: #047857;
+}
+
+.status-rejected {
+  background-color: #fef2f2;
+  color: #b91c1c;
+}
+
+/* Button Styles */
+.icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  color: var(--text-color-secondary);
+  transition: all 0.2s;
+}
+
+.icon-btn:hover {
+  background-color: var(--bg-color-3);
+  color: var(--text-color);
+}
+
+.delete-btn:hover {
+  color: #ef4444;
+}
+
+.favorite-icon {
+  color: #fbbf24;
+}
+
+.no-jobs {
+  text-align: center;
+  color: var(--text-color-secondary);
+  padding: 2rem !important;
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: var(--bg-color);
+  border-radius: 0.5rem;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.delete-modal {
+  max-width: 400px;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  color: var(--text-color-secondary);
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.form-group input, .form-group select, .form-group textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.25rem;
+  background-color: var(--bg-color-2);
+  color: var(--text-color);
+}
+
+.form-group textarea {
+  resize: vertical;
+}
+
+.cancel-btn, .save-btn, .delete-confirm-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cancel-btn {
+  background-color: var(--bg-color-3);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+}
+
+.save-btn {
+  background-color: #3b82f6;
+  border: 1px solid #2563eb;
+  color: white;
+}
+
+.delete-confirm-btn {
+  background-color: #ef4444;
+  border: 1px solid #dc2626;
+  color: white;
+}
+
+.warning {
+  color: #ef4444;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
